@@ -1,0 +1,68 @@
+/* StarRating Component Styles */
+
+.starRating {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+/* Size variants */
+.small .stars svg {
+  width: 14px;
+  height: 14px;
+}
+
+.medium .stars svg {
+  width: 16px;
+  height: 16px;
+}
+
+.large .stars svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Star colors */
+.starFull {
+  color: var(--color-star);
+}
+
+.starHalf {
+  color: var(--color-star);
+}
+
+.starEmpty {
+  color: var(--color-star-empty);
+}
+
+/* Rating text */
+.ratingText {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.small .ratingText {
+  font-size: 0.75rem;
+}
+
+.large .ratingText {
+  font-size: 1rem;
+}
+
+.ratingValue {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.reviewCount {
+  color: var(--color-text-muted);
+}
