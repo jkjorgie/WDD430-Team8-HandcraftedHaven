@@ -101,10 +101,33 @@ export default function ProductDetailPage() {
         </div>
         <div className={styles.commentSection}>
           <h3>Leave a Comment!</h3>
-          <textarea
-            placeholder='Add a comment'
-            className={styles.commentInput}
-          />
+          <form className={styles.commentForm}>
+            <textarea
+              placeholder='Add a comment'
+              className={styles.commentInput}
+              rows={2}
+            />
+            <button
+              type='submit'
+              className={styles.commentSubmitBtn}
+              aria-label='Submit comment'
+            >
+              <svg
+                width='20'
+                height='20'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                aria-hidden='true'
+              >
+                <path
+                  d='M5 10h10M13 6l4 4-4 4'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
       {/* Additional product details would be fetched and displayed here */}

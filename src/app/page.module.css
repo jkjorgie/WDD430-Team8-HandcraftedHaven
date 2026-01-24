@@ -193,7 +193,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  padding-left: 10px;
+  padding-left: calc(100vw - 90%);
 }
 
 .detailSubtitle {
@@ -273,6 +273,50 @@
   min-height: 60px;
   /* make scroll hidden */
   overflow: hidden;
+}
+
+.commentForm {
+  position: relative;
+  width: 100%;
+}
+
+.commentInput {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--spacing-md);
+  padding-right: 44px; /* espacio para el botón */
+  font-size: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-cool);
+  color: var(--color-text-primary);
+  transition: all var(--transition-base);
+  font-family: var(--font-lora), Georgia, serif;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.commentSubmitBtn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.commentSubmitBtn:hover,
+.commentSubmitBtn:focus {
+  background: var(--color-primary-dark, #b86b2b);
 }
 
 /* =============================================
@@ -627,21 +671,38 @@
   }
 }
 
-/* @media (min-width: 900px) {
+@media (min-width: 900px) {
   .detailCard {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .detailSubtitle {
+    grid-column: 1/2;
+    grid-row: 1/2;
   }
 
   .detailImg {
     grid-column: 1/2;
-    grid-row: 1/3;
-  }
-  .detailDesc {
-    grid-column: 2/3;
     grid-row: 2/3;
   }
-} */
+  .detailinfo {
+    grid-column: 1/2;
+    grid-row: 3/4;
+  }
+
+  .detailDescription {
+    grid-column: 2/3;
+    grid-row: 1/3;
+    align-self: center;
+  }
+
+  .commentSection {
+    grid-column: 2/3;
+    grid-row: 3/4;
+  }
+}
 
 /* Touch device optimizations */
 @media (hover: none) {
