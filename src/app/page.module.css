@@ -84,7 +84,7 @@
 .hero {
   position: relative;
   padding: var(--spacing-3xl) var(--spacing-lg);
-  background: linear-gradient(135deg, var(--color-bg-warm) 0%, #FDF4E3 100%);
+  background: linear-gradient(135deg, var(--color-bg-warm) 0%, #fdf4e3 100%);
   overflow: hidden;
 }
 
@@ -174,6 +174,108 @@
 }
 
 /* =============================================
+   Detail Page Styles
+   ============================================= */
+.detailCard {
+  max-width: 800px;
+  margin: 1rem auto;
+  background: var(--color-bg-white);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.detailTitle {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  padding-left: 10px;
+}
+
+.detailSubtitle {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.detailImg {
+  /* center the image horizontally */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detailDesc {
+  font-family: var(--font-lora), Georgia, serif;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  font-size: larger;
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.detailInfo {
+  margin-top: var(--spacing-sm);
+  font-family: var(--font-lora), Georgia, serif;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.detailDescription {
+  margin-top: var(--spacing-md);
+  font-family: var(--font-lora), Georgia, serif;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  text-align: center;
+  margin: auto;
+  width: 70%;
+}
+
+.backLink {
+  display: inline-block;
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  text-decoration: none;
+  color: var(--color-primary);
+  font-family: var(--font-lora), Georgia, serif;
+}
+
+.commentSection {
+  margin-top: var(--spacing-xl);
+  width: 100%;
+  margin: auto;
+  max-width: 70vw;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.commentInput {
+  width: 70%;
+  min-height: 80px;
+  padding: var(--spacing-md);
+  font-size: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-cool);
+  color: var(--color-text-primary);
+  transition: all var(--transition-base);
+  font-family: var(--font-lora), Georgia, serif;
+  resize: vertical;
+  min-height: 60px;
+  /* make scroll hidden */
+  overflow: hidden;
+}
+
+/* =============================================
    Main Content Area
    ============================================= */
 
@@ -245,7 +347,8 @@
 
 .searchInput {
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) * 3);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md)
+    calc(var(--spacing-md) * 3);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -316,7 +419,8 @@
 
 .sortSelect {
   appearance: none;
-  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md)
+    var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -435,43 +539,43 @@
   .headerContent {
     padding: var(--spacing-sm) var(--spacing-md);
   }
-  
+
   .logoText {
     font-size: 1.2rem;
   }
-  
+
   .logoIcon {
     width: 28px;
     height: 28px;
   }
-  
+
   .hero {
     padding: var(--spacing-xl) var(--spacing-md);
   }
-  
+
   .searchSection {
     padding: var(--spacing-xl) var(--spacing-md);
   }
-  
+
   .searchControls {
     flex-direction: column;
     padding: var(--spacing-md);
   }
-  
+
   .searchInputWrapper {
     min-width: 100%;
   }
-  
+
   .sortWrapper {
     width: 100%;
     flex-wrap: wrap;
   }
-  
+
   .sortSelect {
     flex: 1;
     min-width: 0;
   }
-  
+
   .productGrid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: var(--spacing-md);
@@ -492,24 +596,24 @@
     white-space: nowrap;
     border: 0;
   }
-  
+
   .sellerBtn {
     padding: var(--spacing-sm);
   }
-  
+
   .btnIcon {
     width: 22px;
     height: 22px;
   }
-  
+
   .productGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .noResults {
     padding: var(--spacing-2xl) var(--spacing-md);
   }
-  
+
   .noResultsIcon {
     width: 48px;
     height: 48px;
@@ -522,6 +626,22 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* @media (min-width: 900px) {
+  .detailCard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .detailImg {
+    grid-column: 1/2;
+    grid-row: 1/3;
+  }
+  .detailDesc {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
+} */
 
 /* Touch device optimizations */
 @media (hover: none) {
@@ -537,11 +657,11 @@
   .footer {
     display: none;
   }
-  
+
   .page {
     background: white;
   }
-  
+
   .productGrid {
     display: block;
   }
