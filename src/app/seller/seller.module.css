@@ -1,0 +1,157 @@
+/* ===== LAYOUT ===== */
+.sellerLayout {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--color-bg-cool);
+}
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-cool);
+}
+
+/* Header */
+.header {
+  background: var(--color-bg-white);
+  border-bottom: 1px solid var(--color-border-warm);
+  box-shadow: var(--shadow-sm);
+}
+
+
+.headerContent {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo styles */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.nav {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+/* Main content */
+.main {
+  flex: 1; /* 🔥 ESTO es lo que faltaba */
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+/* Footer */
+.footer {
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+/* ===== SELLER FORM ===== */
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.label {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 1rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-border);
+  background: var(--color-bg-cool);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: var(--color-bg-white);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.actions {
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ===== CARD / FORM ===== */
+.card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  font-family: var(--font-playfair);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
