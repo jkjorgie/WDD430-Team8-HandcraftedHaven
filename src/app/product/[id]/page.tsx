@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import styles from '@/app/page.module.css';
@@ -9,6 +10,52 @@ export default function ProductDetailPage() {
   const params = useParams();
   const { id } = params;
   const product = mockProducts.find((p) => p.id === Number(id));
+
+  // Star rating state
+  const [hovered, setHovered] = useState(0);
+  const [selected, setSelected] = useState(0);
+
+  // Pop-up state
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Handle star click
+  const handleStarClick = (star: number) => {
+    setSelected(star);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 1200);
+    // Aquí puedes enviar el rating a un backend o función externa si lo deseas
+  };
+
+  // Render stars
+  const renderStars = () => {
+    return Array.from({ length: 5 }, (_, i) => {
+      const starValue = i + 1;
+      return (
+        <span
+          key={starValue}
+          style={{
+            cursor: 'pointer',
+            color: (hovered || selected) >= starValue ? '#FFD700' : '#ccc',
+            fontSize: '2rem',
+            transition: 'color 0.2s',
+            filter:
+              hovered === starValue ? 'drop-shadow(0 0 6px #FFD700)' : 'none'
+          }}
+          onMouseEnter={() => setHovered(starValue)}
+          onMouseLeave={() => setHovered(0)}
+          onClick={() => handleStarClick(starValue)}
+          aria-label={`Rate ${starValue} star${starValue > 1 ? 's' : ''}`}
+          role='button'
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') handleStarClick(starValue);
+          }}
+        >
+          ★
+        </span>
+      );
+    });
+  };
 
   return (
     <div className={styles.page}>
@@ -75,7 +122,39 @@ export default function ProductDetailPage() {
           height={300}
           className={styles.detailImg}
         />
-        {/* <div className={styles.detailDesc}> */}
+        {/* Star Rating Component */}
+        <div
+          className={styles.starRating}
+          // style={{
+          //   marginBottom: '1rem',
+          //   display: 'block',
+          //   userSelect: 'none'
+          // }}
+        >
+          <p>Rate this!</p>
+          {renderStars()}
+          {showPopup && (
+            <span
+              style={{
+                marginLeft: '1rem',
+                color: '#388e3c',
+                fontWeight: 'bold',
+                background: '#e8f5e9',
+                borderRadius: '6px',
+                padding: '0.2rem 0.7rem',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                fontSize: '1rem',
+                transition: 'opacity 0.3s',
+                position: 'absolute',
+                zIndex: 10,
+                marginTop: '-2rem'
+              }}
+              role='status'
+            >
+              Rated
+            </span>
+          )}
+        </div>
         <div className={styles.detailInfo}>
           <h2>Details</h2>
           <p>
@@ -128,6 +207,33 @@ export default function ProductDetailPage() {
               </svg>
             </button>
           </form>
+        </div>
+        <div className={styles.lastCommentSection}>
+          <h3>Recent Comments</h3>
+          <div className={styles.comment}>
+            <p>
+              <strong>Alice:</strong> Absolutely love this piece! The
+              craftsmanship is top-notch and it fits perfectly in my living
+              room.
+            </p>
+          </div>
+          {/* <div className={styles.comment}>
+            <p>
+              <strong>Bob:</strong> Received this as a gift and couldn't be
+              happier. Highly recommend to anyone looking for unique handmade
+              items.
+            </p>
+          </div> */}
+          <a
+            style={{
+              textAlign: 'center',
+              display: 'block',
+              cursor: 'pointer',
+              marginTop: '1.5rem'
+            }}
+          >
+            Show More
+          </a>
         </div>
       </div>
       {/* Additional product details would be fetched and displayed here */}
