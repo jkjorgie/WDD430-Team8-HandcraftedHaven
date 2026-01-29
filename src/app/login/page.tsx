@@ -25,18 +25,14 @@ function LoginForm() {
     setIsLoading(true);
 
     try {
-      // Add timeout to prevent infinite spinning
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request timed out')), 15000);
-      });
-
-      const signInPromise = signIn('credentials', {
+      const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
+        callbackUrl,
       });
 
-      const result = await Promise.race([signInPromise, timeoutPromise]) as Awaited<ReturnType<typeof signIn>>;
+      console.log('SignIn result:', result);
 
       if (result?.error) {
         setError('Invalid email or password');
@@ -44,22 +40,18 @@ function LoginForm() {
         return;
       }
 
-      if (!result?.ok) {
-        setError('Sign in failed. Please try again.');
-        setIsLoading(false);
+      // Success - redirect manually
+      if (result?.ok) {
+        window.location.href = callbackUrl;
         return;
       }
 
-      // Redirect to seller listings on successful login
-      router.push(callbackUrl);
-      router.refresh();
+      // Fallback error
+      setError('Sign in failed. Please try again.');
+      setIsLoading(false);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'An error occurred';
-      if (message === 'Request timed out') {
-        setError('Connection timed out. Please check your internet connection and try again.');
-      } else {
-        setError('An error occurred. Please try again.');
-      }
+      console.error('SignIn error:', err);
+      setError('An error occurred. Please try again.');
       setIsLoading(false);
     }
   };
