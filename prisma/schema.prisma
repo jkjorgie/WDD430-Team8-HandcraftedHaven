@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum ProductCategory {
+  TEXTILES_WEAVINGS   @map("Textiles & Weavings")
+  CERAMICS_POTTERY    @map("Ceramics & Pottery")
+  WOODCRAFT           @map("Woodcraft")
+  JEWELRY             @map("Jewelry")
+  ACCESSORIES         @map("Accessories")
+  HOME_DECOR          @map("Home Decor")
+  OTHER               @map("Other")
+}
+
+enum ProductStatus {
+  PUBLISHED
+  DRAFT
+  DISABLED
+}
+
+enum UserRole {
+  USER
+  SELLER
+  ADMIN
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+/// User model - stores authentication and profile data
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String?
+  role         UserRole  @default(USER)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  seller       Seller?
+  reviews      Review[]
+
+  @@map("users")
+}
+
+/// Seller model - stores seller profile information
+model Seller {
+  id        String   @id @default(cuid())
+  userId    String   @unique @map("user_id")
+  name      String
+  bio       String?  @db.Text
+  location  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@map("sellers")
+}
+
+/// Product model - stores product listings
+model Product {
+  id          String          @id @default(cuid())
+  sellerId    String          @map("seller_id")
+  title       String
+  description String?         @db.Text
+  category    ProductCategory @default(OTHER)
+  price       Decimal         @db.Decimal(10, 2)
+  stock       Int             @default(0)
+  status      ProductStatus   @default(DRAFT)
+  imageUrl    String?         @map("image_url")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  // Relations
+  seller  Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  reviews Review[]
+
+  @@index([sellerId])
+  @@index([category])
+  @@index([status])
+  @@map("products")
+}
+
+/// Review model - stores product ratings and reviews
+model Review {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  userId    String?  @map("user_id")
+  rating    Int      @db.SmallInt // 1-5 stars
+  content   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([userId])
+  @@map("reviews")
+}
