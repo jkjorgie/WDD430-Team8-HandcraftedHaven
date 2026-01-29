@@ -8,7 +8,6 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-import { db } from '@/lib/db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // Required for Vercel deployment
@@ -32,6 +31,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const password = credentials.password as string;
 
         try {
+          // Lazy import to avoid module initialization issues
+          const { db } = await import('@/lib/db');
+          
           // Find user by email
           const user = await db.user.findUnique({
             where: { email },
@@ -51,6 +53,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
+          console.log('Login successful for:', email);
+          
           // Return user object (excluding password hash)
           return {
             id: user.id,
@@ -92,6 +96,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: 'jwt',
   },
-  // Enable debug logging in development
   debug: process.env.NODE_ENV === 'development',
 });
