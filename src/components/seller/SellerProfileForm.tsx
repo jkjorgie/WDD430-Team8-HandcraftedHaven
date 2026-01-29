@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../seller.module.css";
+import styles from "./SellerProfileForm.module.css";
 
 export type SellerProfileData = {
   name: string;
@@ -9,7 +9,7 @@ export type SellerProfileData = {
   location: string;
 };
 
-type Props = {
+type SellerProfileFormProps = {
   initialData?: SellerProfileData;
   onSubmit: (data: SellerProfileData) => void;
   submitLabel?: string;
@@ -19,7 +19,7 @@ export function SellerProfileForm({
   initialData = { name: "", bio: "", location: "" },
   onSubmit,
   submitLabel,
-}: Props) {
+}: SellerProfileFormProps) {
   const [formData, setFormData] = useState<SellerProfileData>(initialData);
 
   function handleChange(
@@ -86,3 +86,5 @@ export function SellerProfileForm({
     </form>
   );
 }
+
+export default SellerProfileForm;

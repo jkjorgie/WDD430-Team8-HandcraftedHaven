@@ -1,7 +1,7 @@
-import ProductCard from "../ProductCard";
+import { ProductCard } from "@/components/product";
 import styles from "./SellerProductCard.module.css";
 import type { Product } from "@/types/product";
-import SellerActions from "./SellerActions";
+import { SellerActions } from "./SellerActions";
 
 type SellerProductCardProps = {
   product: Product;
@@ -10,7 +10,7 @@ type SellerProductCardProps = {
   priority?: boolean;
 };
 
-export default function SellerProductCard({
+export function SellerProductCard({
   product,
   status,
   stock,
@@ -37,3 +37,5 @@ export default function SellerProductCard({
     </div>
   );
 }
+
+export default SellerProductCard;

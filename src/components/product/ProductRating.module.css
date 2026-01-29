@@ -1,0 +1,69 @@
+/* ProductRating Component Styles */
+
+.ratingContainer {
+  position: relative;
+  padding: var(--spacing-md) 0;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star {
+  cursor: pointer;
+  color: #ccc;
+  font-size: 2rem;
+  transition: color 0.2s, filter 0.2s;
+  user-select: none;
+}
+
+.star.filled {
+  color: #FFD700;
+}
+
+.star.hovered {
+  filter: drop-shadow(0 0 6px #FFD700);
+}
+
+.star:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.popup {
+  margin-left: 1rem;
+  color: #388e3c;
+  font-weight: bold;
+  background: #e8f5e9;
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-size: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.currentRating {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

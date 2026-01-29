@@ -1,0 +1,130 @@
+/* Auth Button Styles */
+
+.authContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+/* Login Button */
+.loginBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--color-terracotta);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.loginBtn:hover {
+  background: var(--color-terracotta-dark);
+}
+
+.loginBtn:active {
+  transform: scale(0.98);
+}
+
+/* Dashboard Link */
+.dashboardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-sage-light);
+  color: var(--color-charcoal);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.dashboardLink:hover {
+  background: var(--color-sage);
+}
+
+/* Sign Out Button */
+.signOutBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  color: var(--color-charcoal-light);
+  border: 1px solid var(--color-sage);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.signOutBtn:hover {
+  background: var(--color-cream);
+  border-color: var(--color-charcoal-light);
+  color: var(--color-charcoal);
+}
+
+/* Loading Skeleton */
+.skeleton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.skeletonText {
+  display: block;
+  width: 100px;
+  height: 36px;
+  background: linear-gradient(
+    90deg,
+    var(--color-sage-light) 25%,
+    var(--color-cream) 50%,
+    var(--color-sage-light) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .authContainer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .loginBtn span,
+  .dashboardLink span,
+  .signOutBtn span {
+    display: none;
+  }
+
+  .loginBtn,
+  .dashboardLink,
+  .signOutBtn {
+    padding: 0.625rem;
+  }
+}

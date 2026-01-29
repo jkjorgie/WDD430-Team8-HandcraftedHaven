@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "../seller.module.css";
-import { SellerProfileForm } from "../components/SellerProfileForm";
+import { SellerProfileForm } from "@/components";
 
 export default function CreateSeller() {
   function handleCreate(data: {

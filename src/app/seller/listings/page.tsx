@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
-import SellerProductCard from "@/components/seller/SellerProductCard";
+import { SellerProductCard } from "@/components";
 import type { SellerProduct } from "@/lib/mockProducts";
 import { getProducts } from "@/lib/mockProducts";
 

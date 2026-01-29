@@ -3,7 +3,7 @@
  * Used across components for type safety
  */
 export interface Product {
-  id: number;
+  id: string;
   title: string;
   price: number;
   image: string;
