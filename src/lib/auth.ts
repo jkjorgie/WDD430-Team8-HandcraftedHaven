@@ -11,6 +11,10 @@ import bcrypt from 'bcryptjs';
 import { db } from '@/lib/db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  // Required for Vercel deployment
+  trustHost: true,
+  secret: process.env.AUTH_SECRET,
+  
   providers: [
     Credentials({
       name: 'credentials',
@@ -20,6 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log('Missing credentials');
           return null;
         }
 
@@ -34,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
 
           if (!user) {
+            console.log('User not found:', email);
             return null;
           }
 
@@ -41,6 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const isValidPassword = await bcrypt.compare(password, user.passwordHash);
 
           if (!isValidPassword) {
+            console.log('Invalid password for:', email);
             return null;
           }
 
@@ -85,4 +92,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: 'jwt',
   },
+  // Enable debug logging in development
+  debug: process.env.NODE_ENV === 'development',
 });

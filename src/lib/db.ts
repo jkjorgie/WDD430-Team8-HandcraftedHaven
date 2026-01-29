@@ -23,26 +23,34 @@
 import { PrismaClient } from '@/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-// Declare global variable type for PrismaClient singleton in development
+// Declare global variable type for PrismaClient singleton
 declare global {
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
-// Create the PostgreSQL adapter
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
-});
+// Lazy initialization function to ensure env vars are available
+function createPrismaClient(): PrismaClient {
+  const connectionString = process.env.DATABASE_URL;
+  
+  if (!connectionString) {
+    throw new Error('DATABASE_URL environment variable is not set');
+  }
 
-// Create PrismaClient singleton
-// In production: create a new instance
+  const adapter = new PrismaPg({ connectionString });
+  
+  return new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === 'development' 
+      ? ['query', 'error', 'warn'] 
+      : ['error'],
+  });
+}
+
+// Create PrismaClient singleton with lazy initialization
+// In production: create a new instance on first access
 // In development: reuse existing instance to prevent hot reload issues
-const db = globalThis.prisma ?? new PrismaClient({
-  adapter,
-  log: process.env.NODE_ENV === 'development' 
-    ? ['query', 'error', 'warn'] 
-    : ['error'],
-});
+const db = globalThis.prisma ?? createPrismaClient();
 
 // Store the instance globally in development to prevent multiple instances
 if (process.env.NODE_ENV !== 'production') {
