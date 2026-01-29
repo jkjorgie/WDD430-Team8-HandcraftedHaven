@@ -1,0 +1,81 @@
+.wrapper {
+  position: relative;
+}
+
+/* ============================= */
+/* Seller Meta */
+/* ============================= */
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.25rem 0;
+  font-size: 0.85rem;
+}
+
+.status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Status variants */
+.published {
+  color: var(--color-success);
+  background-color: rgba(5, 150, 105, 0.12);
+}
+
+.draft {
+  color: var(--color-star);
+  background-color: rgba(217, 119, 6, 0.15);
+}
+
+.disabled {
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-cool);
+  border: 1px solid var(--color-border);
+}
+
+.stock {
+  color: var(--color-text-secondary);
+}
+
+/* ============================= */
+/* Actions */
+/* ============================= */
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Reveal actions on hover */
+.wrapper:hover .actions {
+  opacity: 1;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit {
+  color: var(--color-primary);
+}
+
+.toggle {
+  color: var(--color-text-secondary);
+}
+
+.delete {
+  color: var(--color-error);
+}
