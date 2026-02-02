@@ -59,6 +59,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 export { db };
 
+
 // Export types for convenience
 export type { 
   User, 

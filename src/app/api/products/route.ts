@@ -1,3 +1,7 @@
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { db, ProductStatus } from "@/lib/db";
+
 export async function PATCH(request: Request) {
   const session = await auth();
   if (!session?.user || !session.user.sellerId) {
@@ -11,8 +15,11 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Product ID and status required" }, { status: 400 });
   }
 
-  // Only allow valid status
-  if (!["published", "disabled"].includes(newStatus)) {
+
+  // Only allow valid status (case-insensitive)
+  const allowedStatuses: ProductStatus[] = ["PUBLISHED", "DISABLED"];
+  const normalizedStatus = newStatus.toUpperCase() as ProductStatus;
+  if (!allowedStatuses.includes(normalizedStatus)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
@@ -27,13 +34,10 @@ export async function PATCH(request: Request) {
 
   await db.product.update({
     where: { id: productId },
-    data: { status: newStatus.toUpperCase() },
+    data: { status: normalizedStatus },
   });
   return NextResponse.json({ success: true });
 }
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
 
 export async function DELETE(request: Request) {
   const session = await auth();
