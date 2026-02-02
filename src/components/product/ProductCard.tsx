@@ -52,15 +52,17 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     >
       {/* Product Image */}
       <div className={styles.imageWrapper}>
-        <Image
-          src={image}
-          alt={`${title} - handcrafted by ${seller}`}
-          fill
-          sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className={styles.image}
-          loading={priority ? "eager" : "lazy"}
-          priority={priority}
-        />
+        {image && image !== "" ? (
+          <Image
+            src={image}
+            alt={`${title} - handcrafted by ${seller}`}
+            fill
+            sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className={styles.image}
+            loading={priority ? "eager" : "lazy"}
+            priority={priority}
+          />
+        ) : null}
         <div className={styles.overlay} aria-hidden="true">
           <Link 
             href={productUrl} 

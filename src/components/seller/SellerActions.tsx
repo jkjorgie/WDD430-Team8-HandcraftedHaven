@@ -10,21 +10,44 @@ type SellerActionsProps = {
 };
 
 export function SellerActions({ id, status }: SellerActionsProps) {
+
   const router = useRouter();
 
   const handleEdit = () => {
     router.push(`/seller/listings/${id}/edit`);
   };
 
-  const handleToggle = () => {
-    console.log("Toggle status for", id);
-    alert(status === "published" ? "Disable product " + id : "Publish product " + id);
+  const handleToggle = async () => {
+    const newStatus = status === "published" ? "disabled" : "published";
+    try {
+      const res = await fetch(`/api/products?id=${id}&status=${newStatus}`, {
+        method: "PATCH",
+      });
+      if (res.ok) {
+        router.refresh();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to update status.");
+      }
+    } catch (err) {
+      alert("Error updating status.");
+    }
   };
 
-  const handleDelete = () => {
-    if (confirm("Delete this product?")) {
-      console.log("Delete", id);
-      alert("Deleted " + id);
+  const handleDelete = async () => {
+    if (!confirm("Delete this product?")) return;
+    try {
+      const res = await fetch(`/api/products?id=${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        router.refresh();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to delete product.");
+      }
+    } catch (err) {
+      alert("Error deleting product.");
     }
   };
 

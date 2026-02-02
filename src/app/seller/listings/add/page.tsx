@@ -1,288 +1,200 @@
-  "use client";
+"use client";
+import React from "react";
 
-  import { useState } from "react";
-  import styles from "./page.module.css";
-  import Link from "next/link";
-  import Image from "next/image";
-  import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./page.module.css";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+// Removed duplicate import of useEffect and useState
+import { useFormStatus } from "react-dom";
 
-  type ProductFormData = {
-    title: string;
-    description: string;
-    price: number;
-    image: string;
-    stock: number;
-    category: string;
-    status: "published" | "draft" | "disabled";
-  };
+import { createProduct, CreateProductState } from "./actions";
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_STATUSES,
+} from "@/lib/constants/productEnums";
 
-  export default function AddListingPage() {
-    const router = useRouter();
-    const [formData, setFormData] = useState<ProductFormData>({
-      title: "",
-      description: "",
-      price: 0,
-      image: "",
-      stock: 0,
-      category: "",
-      status: "published",
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState("");
-    const [imageError, setImageError] = useState(false);
 
-    const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
-      const { name, value } = e.target;
-      setFormData((prev) => ({
-        ...prev,
-        [name]:
-          name === "price" || name === "stock" ? parseFloat(value) || 0 : value,
-      }));
-      if (name === "image") setImageError(false);
-      setError("");
-    };
+const initialState: CreateProductState = {};
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setIsSubmitting(true);
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" className={styles.submitButton} disabled={pending}>
+      {pending ? "Creating..." : "Create Product"}
+    </button>
+  );
+}
 
-      try {
-        // Validation
-        if (!formData.title.trim()) {
-          throw new Error("Product title is required");
-        }
-        if (!formData.description.trim()) {
-          throw new Error("Product description is required");
-        }
-        if (formData.price <= 0) {
-          throw new Error("Price must be greater than 0");
-        }
-        if (!formData.image.trim()) {
-          throw new Error("Product image URL is required");
-        }
-        if (formData.stock < 0) {
-          throw new Error("Stock cannot be negative");
-        }
-        if (!formData.category) {
-          throw new Error("Please select a category");
-        }
+function formatCategory(cat: string) {
+  return cat
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
-        // TODO: Replace with actual API call
-        // const response = await fetch("/api/products", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(formData),
-        // });
-        // if (!response.ok) throw new Error("Failed to create product");
 
-        // Temporary success message - redirect to listings
-        console.log("Product created:", formData);
-        router.push("/seller/listings");
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setIsSubmitting(false);
-      }
-    };
+export default function AddListingPage() {
+  const router = useRouter();
+  const [state, formAction] = React.useActionState(createProduct, initialState);
 
-    return (
-      <>
-        {/* Hero / Page Intro */}
-        <section className={styles.hero} aria-labelledby="add-listing-title">
-          <div className={styles.heroContent}>
-            <h1 id="add-listing-title" className={styles.heroTitle}>
-              Add New Product
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Create and list a new handcrafted item. Fill out the details below
-              to get started.
-            </p>
-          </div>
-          <div className={styles.heroDecoration} aria-hidden="true">
-            <div className={styles.heroShape1}></div>
-            <div className={styles.heroShape2}></div>
-          </div>
-        </section>
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageError, setImageError] = useState(false);
 
-        {/* Form Section */}
-        <main className={styles.main}>
-          <div className={styles.formContainer}>
-            <form onSubmit={handleSubmit} className={styles.form}>
-              {error && (
-                <div className={styles.errorAlert} role="alert">
-                  <span className={styles.errorIcon}>⚠️</span>
-                  <span>{error}</span>
-                </div>
-              )}
+  useEffect(() => {
+    if (state.success) {
+      router.push("/seller/listings");
+    }
+  }, [state.success, router]);
 
-              {/* Form Grid */}
-              <div className={styles.formGrid}>
-                {/* Product Title */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="title" className={styles.label}>
-                    Product Title <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder="e.g., Handwoven Basket"
-                    className={styles.input}
-                    required
-                  />
-                </div>
+  return (
+    <>
+      {/* Hero */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>Add New Product</h1>
+          <p className={styles.heroSubtitle}>
+            Create and list a new handcrafted item.
+          </p>
+        </div>
+      </section>
 
-                {/* Category */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="category" className={styles.label}>
-                    Category <span className={styles.required}>*</span>
-                  </label>
-                  <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    className={styles.input}
-                    required
-                  >
-                    <option value="">Select a category</option>
-                    <option value="textiles">Textiles & Weavings</option>
-                    <option value="ceramics">Ceramics & Pottery</option>
-                    <option value="woodcraft">Woodcraft</option>
-                    <option value="jewelry">Jewelry</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="home">Home Décor</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+      <main className={styles.main}>
+        <div className={styles.formContainer}>
+          <form action={formAction} className={styles.form}>
+            {state.errors?._form && (
+              <div className={styles.errorAlert}>
+                ⚠️ {state.errors._form[0]}
+              </div>
+            )}
 
-                {/* Price */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="price" className={styles.label}>
-                    Price (USD) <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="0.00"
-                    step="0.01"
-                    min="0"
-                    className={styles.input}
-                    required
-                  />
-                </div>
-
-                {/* Stock */}
-                <div className={styles.formGroup}>
-                  <label htmlFor="stock" className={styles.label}>
-                    Stock Quantity <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="number"
-                    id="stock"
-                    name="stock"
-                    value={formData.stock}
-                    onChange={handleChange}
-                    placeholder="0"
-                    min="0"
-                    className={styles.input}
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="status" className={styles.label}>
-                    Status <span className={styles.required}>*</span>
-                  </label>
-                  <select
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className={styles.input}
-                    required
-                  >
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
-                    <option value="disabled">Disabled</option>
-                  </select>
-                </div>
-
-                {/* Image URL - Full Width */}
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label htmlFor="image" className={styles.label}>
-                    Product Image URL <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    type="url"
-                    id="image"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleChange}
-                    placeholder="https://picsum.photos/seed/product/400/400"
-                    className={styles.input}
-                    required
-                  />
-                  {formData.image && (
-                    <div className={styles.imagePreview}>
-                      {!imageError ? (
-                        <Image
-                          src={formData.image}
-                          alt="Product preview"
-                          fill
-                          style={{ objectFit: "cover" }}
-                          onError={() => setImageError(true)}
-                          unoptimized
-                        />
-                      ) : (
-                        <div className={styles.previewFallback}>Image unavailable</div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Description - Full Width */}
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label htmlFor="description" className={styles.label}>
-                    Product Description{" "}
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Describe your product, materials, care instructions, and any special details..."
-                    className={`${styles.input} ${styles.textarea}`}
-                    rows={5}
-                    required
-                  />
-                </div>
+            <div className={styles.formGrid}>
+              {/* Title */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Product Title *</label>
+                <input name="title" className={styles.input} />
+                {state.errors?.title && (
+                  <p className={styles.errorText}>{state.errors.title[0]}</p>
+                )}
               </div>
 
-              {/* Form Actions */}
-              <div className={styles.formActions}>
-                <Link href="/seller/listings" className={styles.cancelButton}>
-                  Cancel
-                </Link>
-                <button
-                  type="submit"
-                  className={styles.submitButton}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Creating..." : "Create Product"}
-                </button>
+              {/* Category */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Category *</label>
+                <select name="category" className={styles.input}>
+                  <option value="">Select a category</option>
+                  {PRODUCT_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {formatCategory(cat)}
+                    </option>
+                  ))}
+                </select>
+
+                {state.errors?.category && (
+                  <p className={styles.errorText}>
+                    {state.errors.category[0]}
+                  </p>
+                )}
               </div>
-            </form>
-          </div>
-        </main>
-      </>
-    );
-  }
+
+              {/* Price */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Price *</label>
+                <input
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  className={styles.input}
+                />
+                {state.errors?.price && (
+                  <p className={styles.errorText}>{state.errors.price[0]}</p>
+                )}
+              </div>
+
+              {/* Stock */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Stock *</label>
+                <input
+                  name="stock"
+                  type="number"
+                  min="0"
+                  className={styles.input}
+                />
+                {state.errors?.stock && (
+                  <p className={styles.errorText}>{state.errors.stock[0]}</p>
+                )}
+              </div>
+
+              {/* Status */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Status *</label>
+                <select name="status" className={styles.input}>
+                  {PRODUCT_STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+
+              </div>
+
+              {/* Image */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label className={styles.label}>Image URL</label>
+                <input
+                  name="imageUrl"
+                  type="url"
+                  className={styles.input}
+                  onChange={(e) => {
+                    setImagePreview(e.target.value);
+                    setImageError(false);
+                  }}
+                />
+                {imagePreview && (
+                  <div className={styles.imagePreview}>
+                    {!imageError ? (
+                      <Image
+                        src={imagePreview}
+                        alt="Preview"
+                        fill
+                        unoptimized
+                        onError={() => setImageError(true)}
+                      />
+                    ) : (
+                      <div className={styles.previewFallback}>
+                        Image unavailable
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label className={styles.label}>Description *</label>
+                <textarea
+                  name="description"
+                  rows={5}
+                  className={`${styles.input} ${styles.textarea}`}
+                />
+                {state.errors?.description && (
+                  <p className={styles.errorText}>
+                    {state.errors.description[0]}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.formActions}>
+              <Link href="/seller/listings" className={styles.cancelButton}>
+                Cancel
+              </Link>
+              <SubmitButton />
+            </div>
+          </form>
+        </div>
+      </main>
+    </>
+  );
+}
