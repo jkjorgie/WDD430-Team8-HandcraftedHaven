@@ -14,65 +14,142 @@
   background: var(--color-bg-cool);
 }
 
+/* ============================= */
 /* Header */
+/* ============================= */
+
 .header {
   background: var(--color-bg-white);
   border-bottom: 1px solid var(--color-border-warm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
   box-shadow: var(--shadow-sm);
 }
-
 
 .headerContent {
   max-width: 1280px;
   margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Logo styles */
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   text-decoration: none;
 }
 
 .logoIcon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   color: var(--color-primary);
   flex-shrink: 0;
 }
 
 .logoText {
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  letter-spacing: -0.02em;
 }
 
 .nav {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
-.navLinks {
-  display: flex;
-  gap: var(--spacing-lg);
+.sellerBtn {
+  font-family: var(--font-lora), Georgia, serif;
+}
+
+.btnIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.hero {
+  position: relative;
+  margin-top: -45px;
+  margin-left: -50px;
+  margin-right: -50px;
+  margin-bottom: -40px;
+  padding: 0; /* flush to top and sides */
+  background: linear-gradient(135deg, var(--color-bg-warm) 0%, #FDF4E3 100%);
+  overflow: hidden;
+}
+
+.heroContent {
+  max-width: none; /* allow full-bleed content area */
+  width: 100%;
+  margin: 0;
+  padding: var(--spacing-2xl) 0; /* vertical spacing only */
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.heroTitle {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.heroSubtitle {
+  font-family: var(--font-lora), Georgia, serif;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  max-width: 720px;
+  margin: 0.5rem auto 1rem;
+}
+
+.heroCta {
+  margin-top: 1rem;
+}
+
+.heroDecoration {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heroShape1 {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.05;
+}
+
+.heroShape2 {
+  position: absolute;
+  bottom: -20px;
+  left: 8%;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.07;
 }
 
 /* Main content */
 .main {
-  flex: 1; /* 🔥 ESTO es lo que faltaba */
+  flex: 1; /* allow main area to grow */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
   padding: var(--spacing-2xl) var(--spacing-lg);
 }
 

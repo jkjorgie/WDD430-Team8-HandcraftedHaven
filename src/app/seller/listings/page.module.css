@@ -1,84 +1,23 @@
 /* Page Container - match main page layout */
-.page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-bg-warm);
-}
-
-/* ============================= */
-/* Header */
-/* ============================= */
-
-.header {
-  background: var(--color-bg-white);
-  border-bottom: 1px solid var(--color-border-warm);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-sm);
-}
-
-.headerContent {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-}
-
-.logoIcon {
-  width: 34px;
-  height: 34px;
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.logoText {
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.sellerBtn {
-  font-family: var(--font-lora), Georgia, serif;
-}
-
-.btnIcon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
 .hero {
   position: relative;
-  padding: 3rem 1.5rem;
+  margin-top: -45px;
+  margin-left: -50px;
+  margin-right: -50px;
+  margin-bottom: -40px;
+  padding: 0; /* flush to top and sides */
   background: linear-gradient(135deg, var(--color-bg-warm) 0%, #FDF4E3 100%);
   overflow: hidden;
 }
 
 .heroContent {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: none; /* allow full-bleed content area */
+  width: 100%;
+  margin: 0;
+  padding: var(--spacing-2xl) 0; /* vertical spacing only */
   text-align: center;
   position: relative;
   z-index: 2;
-  padding: 1.25rem 0 2rem;
 }
 
 .heroTitle {
@@ -134,7 +73,7 @@
 /* Main content wrapper below hero */
 .main {
   background: var(--color-bg-cool);
-  padding: 2rem 1.5rem 4rem;
+  padding: var(--spacing-2xl) var(--spacing-lg) 0; /* reduce bottom space before footer */
 }
 
 /* ============================= */
@@ -163,20 +102,21 @@
 /* ============================= */
 
 .listings {
-  /* Listings container: transparent so product cards sit on page background */
+  /* Listings container: match home page container sizing */
   background: transparent;
   border-radius: 0;
-  padding: 2rem 0;
+  padding: var(--spacing-2xl) 0 0;
+  width: 100%;
   max-width: 1280px;
-  margin: 1.5rem auto;
+  margin: 1.5rem auto 0;
   box-shadow: none;
 }
 
 /* Grid placeholder (cards come later) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
-  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
   align-items: start;
 }
 
@@ -234,22 +174,4 @@
   }
 }
 
-/* Footer styles (shared) */
-.footer {
-  background: var(--color-text-primary);
-  color: var(--color-text-inverse);
-  padding: 2rem 1.5rem;
-}
 
-.footerContent {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footerContent p {
-  font-family: var(--font-lora), Georgia, serif;
-  font-size: 0.95rem;
-  opacity: 0.9;
-  margin: 0;
-}
