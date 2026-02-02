@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import styles from "./SellerProductCard.module.css";
 
 type SellerActionsProps = {
-  id: number;
+  id: string;
   status: "published" | "draft" | "disabled";
   stock: number;
 };
 
-export default function SellerActions({ id, status, stock }: SellerActionsProps) {
+export function SellerActions({ id, status }: SellerActionsProps) {
   const router = useRouter();
 
   const handleEdit = () => {
@@ -42,3 +42,5 @@ export default function SellerActions({ id, status, stock }: SellerActionsProps)
     </div>
   );
 }
+
+export default SellerActions;

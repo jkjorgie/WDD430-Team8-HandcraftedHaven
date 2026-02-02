@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lora } from "next/font/google";
+import { Providers } from "@/components";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -42,7 +43,9 @@ export default function RootLayout({
           id="announcements"
         />
         
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

@@ -5,9 +5,10 @@ export type SellerProduct = Product & {
   stock: number;
 };
 
+// Mock data with string IDs to match database schema
 let products: SellerProduct[] = [
   {
-    id: 1,
+    id: "mock-1",
     title: "Handwoven Basket",
     price: 32,
     image: "https://picsum.photos/seed/vase/400/400",
@@ -19,7 +20,7 @@ let products: SellerProduct[] = [
     stock: 5,
   },
   {
-    id: 2,
+    id: "mock-2",
     title: "Handwoven Carpet",
     price: 12,
     image: "https://picsum.photos/seed/macrame/400/400",
@@ -31,7 +32,7 @@ let products: SellerProduct[] = [
     stock: 10,
   },
   {
-    id: 3,
+    id: "mock-3",
     title: "Handwoven Hat",
     price: 22,
     image: "https://picsum.photos/seed/journal/400/400",
@@ -43,7 +44,7 @@ let products: SellerProduct[] = [
     stock: 0,
   },
   {
-    id: 4,
+    id: "mock-4",
     title: "Handwoven Gloves",
     price: 5,
     image: "https://picsum.photos/seed/candles/400/400",
@@ -55,7 +56,7 @@ let products: SellerProduct[] = [
     stock: 50,
   },
   {
-    id: 5,
+    id: "mock-5",
     title: "Handwoven Shirts",
     price: 5,
     image: "https://picsum.photos/seed/bowl/400/400",
@@ -67,7 +68,7 @@ let products: SellerProduct[] = [
     stock: 100,
   },
   {
-    id: 6,
+    id: "mock-6",
     title: "Handwoven Socks",
     price: 5.84,
     image: "https://picsum.photos/seed/earrings/400/400",
@@ -79,7 +80,7 @@ let products: SellerProduct[] = [
     stock: 5,
   },
   {
-    id: 7,
+    id: "mock-7",
     title: "Handwoven Socks",
     price: 5.84,
     image: "https://picsum.photos/seed/earrings/400/400",
@@ -96,20 +97,20 @@ export function getProducts(): SellerProduct[] {
   return products.map((p) => ({ ...p }));
 }
 
-export function getProductById(id: number): SellerProduct | undefined {
+export function getProductById(id: string): SellerProduct | undefined {
   const p = products.find((x) => x.id === id);
   return p ? { ...p } : undefined;
 }
 
-export function updateProduct(id: number, data: Partial<SellerProduct>): boolean {
+export function updateProduct(id: string, data: Partial<SellerProduct>): boolean {
   const idx = products.findIndex((p) => p.id === id);
   if (idx === -1) return false;
   products[idx] = { ...products[idx], ...data };
   return true;
 }
 
-export function addProduct(data: Omit<SellerProduct, 'id' | 'createdAt'> & { id?: number }) {
-  const id = data.id ?? Math.max(0, ...products.map((p) => p.id)) + 1;
+export function addProduct(data: Omit<SellerProduct, 'id' | 'createdAt'> & { id?: string }) {
+  const id = data.id ?? `mock-${Date.now()}`;
   const newProduct: SellerProduct = {
     ...data,
     id,

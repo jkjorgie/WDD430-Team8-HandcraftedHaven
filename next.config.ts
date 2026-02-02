@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Ensure Prisma and pg work correctly in serverless
+  serverExternalPackages: ['@prisma/client', '@prisma/adapter-pg', 'pg'],
 };
 
 export default nextConfig;

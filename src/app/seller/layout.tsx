@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { AuthButton } from "@/components";
 import styles from "./seller.module.css";
 
 export default function SellerLayout({
@@ -27,6 +28,7 @@ export default function SellerLayout({
             <span className={styles.logoText}>Handcrafted Haven</span>
           </Link>
           <nav className={styles.nav} aria-label="Main navigation">
+            <AuthButton />
             <Link
                 href="/seller/profile"
                 className={`btn btn-primary ${styles.sellerBtn}`}

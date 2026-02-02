@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 export default function EditListingPage() {
   const router = useRouter();
   const params = useParams();
-  const id = Number(params?.id ?? 0);
+  const id = String(params?.id ?? '');
 
   const [product, setProduct] = useState<SellerProduct | undefined>(undefined);
   const [formData, setFormData] = useState<any>({});
