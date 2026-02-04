@@ -29,26 +29,6 @@ export default function SellerLayout({
           </Link>
           <nav className={styles.nav} aria-label="Main navigation">
             <AuthButton />
-            <Link
-                href="/seller/profile"
-                className={`btn btn-primary ${styles.sellerBtn}`}
-              >
-                <svg
-                  className={styles.btnIcon}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                <span>Seller Profile</span>
-              </Link>
 
           </nav>
         </div>
