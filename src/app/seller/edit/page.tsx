@@ -1,22 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import styles from "../seller.module.css";
 import { SellerProfileForm } from "@/components";
 
 export default function EditSeller() {
-  const initialData = {
-    name: "Sample Seller",
-    bio: "This is a sample biography.",
-    location: "Sample City",
-  };
+  const [initialData, setInitialData] = useState(null);
 
-  function handleEdit(data: {
-    name: string;
-    bio: string;
-    location: string;
-  }) {
-    console.log("Editing seller:", data);
+  useEffect(() => {
+    async function fetchSeller() {
+      const res = await fetch("/api/seller/me");
+      const data = await res.json();
+      setInitialData(data);
+    }
+
+    fetchSeller();
+  }, []);
+
+  async function handleEdit(data) {
+    await fetch("/api/seller/me", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    alert("Profile updated!");
   }
+
+  if (!initialData) return <p>Loading...</p>;
 
   return (
     <div className={styles.sellerLayout}>
