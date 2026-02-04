@@ -1,33 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "../seller.module.css";
-import { SellerProfileForm } from "@/components";
+import { SellerProfileForm, SellerProfileData } from "@/components";
 
 export default function EditSeller() {
-  const [initialData, setInitialData] = useState(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    async function fetchSeller() {
-      const res = await fetch("/api/seller/me");
-      const data = await res.json();
-      setInitialData(data);
-    }
+  // Temporary mock data (until DB/API is connected)
+  const initialData: SellerProfileData = {
+    name: "Sample Seller",
+    bio: "This is a sample biography.",
+    location: "Sample City",
+  };
 
-    fetchSeller();
-  }, []);
+  // Simulated WRITE logic
+  function handleEdit(data: SellerProfileData) {
+    console.log("Updated seller profile:", data);
 
-  async function handleEdit(data) {
-    await fetch("/api/seller/me", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    alert("Profile updated!");
+    // Later this will call API / Prisma
+    router.push("/seller/listings");
   }
-
-  if (!initialData) return <p>Loading...</p>;
 
   return (
     <div className={styles.sellerLayout}>
@@ -39,6 +33,11 @@ export default function EditSeller() {
           submitLabel="Save Changes"
           onSubmit={handleEdit}
         />
+
+        {/* Back link */}
+        <div className={styles.backLink}>
+          <Link href="/seller/listings">← Back to My Listings</Link>
+        </div>
       </div>
     </div>
   );
