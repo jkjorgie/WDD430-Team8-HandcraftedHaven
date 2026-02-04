@@ -22,7 +22,7 @@
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
     "next": "^16.1.4",
-    "next-auth": "5.0.0-beta.30",
+    "next-auth": "^5.0.0-beta.30",
     "prisma": "^7.3.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
