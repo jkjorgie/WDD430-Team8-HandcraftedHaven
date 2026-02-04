@@ -21,9 +21,16 @@ export default async function SellerListingsPage() {
           <p className={styles.heroSubtitle}>
             Manage your handcrafted items and availability.
           </p>
-          <Link href="/seller/listings/add" className={styles.addButton}>
-            + Add New Product
-          </Link>
+
+          <div className={styles.heroActions}>
+            <Link href="/seller/listings/add" className={styles.addButton}>
+              + Add New Product
+            </Link>
+
+            <Link href="/seller/edit" className={styles.addButton}>
+              Edit Seller Profile
+            </Link>
+          </div>
         </div>
       </section>
 

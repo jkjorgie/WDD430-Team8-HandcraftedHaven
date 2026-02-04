@@ -10,7 +10,7 @@ export default function SellerProfile() {
         <h1 className={styles.title}>Seller Profile</h1>
 
         <p>
-          From here you can create or edit your seller profile and manage
+          From here you can create your seller profile and manage
           your listings.
         </p>
 
@@ -26,9 +26,6 @@ export default function SellerProfile() {
             Create Profile
           </Link>
 
-          <Link href="/seller/edit" className="btn btn-secondary">
-            Edit Profile
-          </Link>
         </div>
       </div>
     </div>
