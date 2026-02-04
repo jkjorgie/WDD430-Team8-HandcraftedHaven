@@ -20,7 +20,7 @@
  *   await db.review.delete({ where: { id: '...' } });
  */
 
-import { PrismaClient } from '@/generated/prisma/client';
+import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 // Declare global variable type for PrismaClient singleton
