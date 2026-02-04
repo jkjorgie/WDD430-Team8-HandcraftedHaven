@@ -144,12 +144,13 @@
   opacity: 0.07;
 }
 
+
 /* Main content */
 .main {
   flex: 1; /* allow main area to grow */
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   padding: var(--spacing-2xl) var(--spacing-lg);
 }
 
@@ -231,4 +232,3 @@
   margin-bottom: var(--spacing-xl);
   text-align: center;
 }
-

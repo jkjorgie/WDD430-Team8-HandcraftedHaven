@@ -70,7 +70,7 @@
   opacity: 0.07;
 }
 
-/* Main content wrapper below hero */
+  /* Main content wrapper below hero */
 .main {
   background: var(--color-bg-cool);
   padding: var(--spacing-2xl) var(--spacing-lg) 0; /* reduce bottom space before footer */
@@ -90,6 +90,7 @@
   cursor: pointer;
   box-shadow: var(--shadow-md);
   transition: background-color 0.2s ease, transform 0.15s ease;
+  margin: 1rem;
 }
 
 .addButton:hover {
