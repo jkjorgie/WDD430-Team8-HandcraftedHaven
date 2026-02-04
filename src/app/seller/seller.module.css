@@ -150,7 +150,7 @@
   flex: 1; /* allow main area to grow */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items:stretch;
   padding: var(--spacing-2xl) var(--spacing-lg);
 }
 
