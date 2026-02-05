@@ -52,7 +52,9 @@ export async function updateProduct(
     data: parsed.data,
   });
 
+  // Revalidate both seller listings and home page
   revalidatePath("/seller/listings");
+  revalidatePath("/");
 
   return { success: true };
 }
