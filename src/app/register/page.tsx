@@ -1,25 +1,26 @@
-'use client';
+"use client";
 
-import { useState, useId } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { registerSeller } from '@/actions/auth';
-import styles from './page.module.css';
+import { useState, useId } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Header } from "@/components";
+import { registerSeller } from "@/actions/auth";
+import styles from "./page.module.css";
 
 export default function RegisterPage() {
   const router = useRouter();
-  
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    shopName: '',
-    bio: '',
-    location: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    shopName: "",
+    bio: "",
+    location: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const emailId = useId();
@@ -30,24 +31,26 @@ export default function RegisterPage() {
   const bioId = useId();
   const locationId = useId();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     // Validate password strength
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError("Password must be at least 8 characters");
       return;
     }
 
@@ -70,7 +73,7 @@ export default function RegisterPage() {
       }
 
       // Auto sign in after registration
-      const signInResult = await signIn('credentials', {
+      const signInResult = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
         redirect: false,
@@ -78,40 +81,22 @@ export default function RegisterPage() {
 
       if (signInResult?.error) {
         // Account created but auto-login failed, redirect to login
-        router.push('/login?registered=true');
+        router.push("/login?registered=true");
         return;
       }
 
       // Redirect to seller listings
-      router.push('/seller/listings');
+      router.push("/seller/listings");
       router.refresh();
     } catch {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
       setIsLoading(false);
     }
   };
 
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <header className={styles.header} role="banner">
-        <div className={styles.headerContent}>
-          <Link href="/" className={styles.logo} aria-label="Handcrafted Haven - Home">
-            <svg 
-              className={styles.logoIcon} 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3C7.5 3 4 6.5 4 10c0 2 1 3.5 2 4.5V20h12v-5.5c1-1 2-2.5 2-4.5 0-3.5-3.5-7-8-7z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 20v-3M15 20v-3M12 3v4M8 10h8" />
-            </svg>
-            <span className={styles.logoText}>Handcrafted Haven</span>
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className={styles.main}>
@@ -126,14 +111,18 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className={styles.form}>
             {error && (
               <div className={styles.error} role="alert">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   strokeWidth="2"
                   aria-hidden="true"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
                 </svg>
                 <span>{error}</span>
               </div>
@@ -141,7 +130,7 @@ export default function RegisterPage() {
 
             <fieldset className={styles.fieldset}>
               <legend className={styles.legend}>Account Information</legend>
-              
+
               <div className={styles.formGroup}>
                 <label htmlFor={nameId} className={styles.label}>
                   Your Name <span className={styles.required}>*</span>
@@ -218,7 +207,7 @@ export default function RegisterPage() {
 
             <fieldset className={styles.fieldset}>
               <legend className={styles.legend}>Shop Information</legend>
-              
+
               <div className={styles.formGroup}>
                 <label htmlFor={shopNameId} className={styles.label}>
                   Shop Name <span className={styles.required}>*</span>
@@ -269,32 +258,32 @@ export default function RegisterPage() {
               </div>
             </fieldset>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitBtn}
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <svg 
-                    className={styles.spinner} 
+                  <svg
+                    className={styles.spinner}
                     viewBox="0 0 24 24"
                     aria-hidden="true"
                   >
-                    <circle 
-                      cx="12" 
-                      cy="12" 
-                      r="10" 
-                      stroke="currentColor" 
-                      strokeWidth="3" 
-                      fill="none" 
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="none"
                       strokeDasharray="31.4 31.4"
                     />
                   </svg>
                   Creating Account...
                 </>
               ) : (
-                'Create Seller Account'
+                "Create Seller Account"
               )}
             </button>
           </form>
@@ -314,7 +303,10 @@ export default function RegisterPage() {
       {/* Footer */}
       <footer className={styles.footer} role="contentinfo">
         <div className={styles.footerContent}>
-          <p>© {new Date().getFullYear()} Handcrafted Haven. Supporting artisans worldwide.</p>
+          <p>
+            © {new Date().getFullYear()} Handcrafted Haven. Supporting artisans
+            worldwide.
+          </p>
         </div>
       </footer>
     </div>

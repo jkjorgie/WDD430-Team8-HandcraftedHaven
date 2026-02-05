@@ -1,41 +1,43 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { AuthButton } from '@/components';
-import styles from '@/app/page.module.css';
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { Header } from "@/components";
+import styles from "@/app/page.module.css";
 
 // TODO: Replace this mock data with database fetch using getProductById from @/actions/products
 // Example: const product = await getProductById(id);
 const mockProducts = [
   {
-    id: '1',
-    title: 'Hand-Thrown Ceramic Vase',
+    id: "1",
+    title: "Hand-Thrown Ceramic Vase",
     price: 89.0,
-    image: 'https://picsum.photos/seed/vase/400/400',
-    seller: 'Emma Pottery',
+    image: "https://picsum.photos/seed/vase/400/400",
+    seller: "Emma Pottery",
     rating: 4.8,
     reviewCount: 124,
-    description: 'A beautiful hand-thrown ceramic vase, perfect for displaying fresh or dried flowers.',
+    description:
+      "A beautiful hand-thrown ceramic vase, perfect for displaying fresh or dried flowers.",
   },
   {
-    id: '2',
-    title: 'Woven Macramé Wall Hanging',
+    id: "2",
+    title: "Woven Macramé Wall Hanging",
     price: 65.0,
-    image: 'https://picsum.photos/seed/macrame/400/400',
-    seller: 'Fiber Arts Co',
+    image: "https://picsum.photos/seed/macrame/400/400",
+    seller: "Fiber Arts Co",
     rating: 4.9,
     reviewCount: 89,
-    description: 'Handcrafted macramé wall hanging made with natural cotton rope.',
+    description:
+      "Handcrafted macramé wall hanging made with natural cotton rope.",
   },
 ];
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const id = String(params?.id ?? '');
-  
+  const id = String(params?.id ?? "");
+
   // TODO: Replace with database fetch - use getProductById(id) from @/actions/products
   const product = mockProducts.find((p) => p.id === id) || mockProducts[0];
 
@@ -58,20 +60,21 @@ export default function ProductDetailPage() {
         <span
           key={starValue}
           style={{
-            cursor: 'pointer',
-            color: (hovered || selected) >= starValue ? '#FFD700' : '#ccc',
-            fontSize: '2rem',
-            transition: 'color 0.2s',
-            filter: hovered === starValue ? 'drop-shadow(0 0 6px #FFD700)' : 'none',
+            cursor: "pointer",
+            color: (hovered || selected) >= starValue ? "#FFD700" : "#ccc",
+            fontSize: "2rem",
+            transition: "color 0.2s",
+            filter:
+              hovered === starValue ? "drop-shadow(0 0 6px #FFD700)" : "none",
           }}
           onMouseEnter={() => setHovered(starValue)}
           onMouseLeave={() => setHovered(0)}
           onClick={() => handleStarClick(starValue)}
-          aria-label={`Rate ${starValue} star${starValue > 1 ? 's' : ''}`}
-          role='button'
+          aria-label={`Rate ${starValue} star${starValue > 1 ? "s" : ""}`}
+          role="button"
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') handleStarClick(starValue);
+            if (e.key === "Enter" || e.key === " ") handleStarClick(starValue);
           }}
         >
           ★
@@ -80,47 +83,14 @@ export default function ProductDetailPage() {
     });
   };
 
-  const formattedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const formattedPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   }).format(product.price);
 
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <header className={styles.header} role='banner'>
-        <div className={styles.headerContent}>
-          <Link
-            href='/'
-            className={styles.logo}
-            aria-label='Handcrafted Haven - Home'
-          >
-            <svg
-              className={styles.logoIcon}
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeWidth='1.5'
-              aria-hidden='true'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 3C7.5 3 4 6.5 4 10c0 2 1 3.5 2 4.5V20h12v-5.5c1-1 2-2.5 2-4.5 0-3.5-3.5-7-8-7z'
-              />
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M9 20v-3M15 20v-3M12 3v4M8 10h8'
-              />
-            </svg>
-            <span className={styles.logoText}>Handcrafted Haven</span>
-          </Link>
-          <nav className={styles.nav} aria-label='Main navigation'>
-            <AuthButton />
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main className={styles.main}>
         <h1 className={styles.detailTitle}>Product Details</h1>
@@ -138,27 +108,29 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Interactive Star Rating */}
-          <div className={styles.starRating} style={{ position: 'relative' }}>
-            <p style={{ marginBottom: '0.5rem', fontWeight: 500 }}>
+          <div className={styles.starRating} style={{ position: "relative" }}>
+            <p style={{ marginBottom: "0.5rem", fontWeight: 500 }}>
               Rate this product!
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
+            >
               {renderStars()}
               {showPopup && (
                 <span
                   style={{
-                    marginLeft: '1rem',
-                    color: '#388e3c',
-                    fontWeight: 'bold',
-                    background: '#e8f5e9',
-                    borderRadius: '6px',
-                    padding: '0.2rem 0.7rem',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                    fontSize: '1rem',
+                    marginLeft: "1rem",
+                    color: "#388e3c",
+                    fontWeight: "bold",
+                    background: "#e8f5e9",
+                    borderRadius: "6px",
+                    padding: "0.2rem 0.7rem",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    fontSize: "1rem",
                   }}
-                  role='status'
+                  role="status"
                 >
-                  Rated {selected} {selected === 1 ? 'star' : 'stars'}!
+                  Rated {selected} {selected === 1 ? "star" : "stars"}!
                 </span>
               )}
             </div>
@@ -173,7 +145,8 @@ export default function ProductDetailPage() {
               <strong>Price:</strong> {formattedPrice}
             </p>
             <p>
-              <strong>Rating:</strong> {product.rating} ({product.reviewCount} reviews)
+              <strong>Rating:</strong> {product.rating} ({product.reviewCount}{" "}
+              reviews)
             </p>
           </div>
 
@@ -190,27 +163,27 @@ export default function ProductDetailPage() {
             <h3>Leave a Comment!</h3>
             <form className={styles.commentForm}>
               <textarea
-                placeholder='Add a comment'
+                placeholder="Add a comment"
                 className={styles.commentInput}
                 rows={2}
               />
               <button
-                type='submit'
+                type="submit"
                 className={styles.commentSubmitBtn}
-                aria-label='Submit comment'
+                aria-label="Submit comment"
               >
                 <svg
-                  width='20'
-                  height='20'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  aria-hidden='true'
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
                 >
                   <path
-                    d='M5 10h10M13 6l4 4-4 4'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
+                    d="M5 10h10M13 6l4 4-4 4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </button>
@@ -228,13 +201,13 @@ export default function ProductDetailPage() {
             </div>
             <button
               style={{
-                textAlign: 'center',
-                display: 'block',
-                cursor: 'pointer',
-                marginTop: '1.5rem',
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-terracotta)',
+                textAlign: "center",
+                display: "block",
+                cursor: "pointer",
+                marginTop: "1.5rem",
+                background: "none",
+                border: "none",
+                color: "var(--color-terracotta)",
                 fontWeight: 500,
               }}
             >
@@ -243,7 +216,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        <Link className={styles.backLink} href='/'>
+        <Link className={styles.backLink} href="/">
           ← Back to Home
         </Link>
       </main>
