@@ -51,12 +51,6 @@
   justify-content: space-between;
   gap: 0.5rem;
   padding-top: 0.75rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-/* Reveal actions on hover */
-.wrapper:hover .actions {
   opacity: 1;
 }
 
@@ -66,16 +60,38 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.actions button:hover {
+  transform: translateY(-1px);
 }
 
 .edit {
   color: var(--color-primary);
 }
 
+.edit:hover {
+  background: rgba(194, 106, 31, 0.1);
+  color: var(--color-primary-hover);
+}
+
 .toggle {
   color: var(--color-text-secondary);
 }
 
+.toggle:hover {
+  background: var(--color-bg-cool);
+  color: var(--color-text-primary);
+}
+
 .delete {
   color: var(--color-error);
+}
+
+.delete:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
 }

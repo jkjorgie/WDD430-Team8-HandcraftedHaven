@@ -5,16 +5,19 @@
   margin-left: -50px;
   margin-right: -50px;
   margin-bottom: -40px;
-  padding: 0; /* flush to top and sides */
+  padding: 0;
+  /* flush to top and sides */
   background: linear-gradient(135deg, var(--color-bg-warm) 0%, #FDF4E3 100%);
   overflow: hidden;
 }
 
 .heroContent {
-  max-width: none; /* allow full-bleed content area */
+  max-width: none;
+  /* allow full-bleed content area */
   width: 100%;
   margin: 0;
-  padding: var(--spacing-2xl) 0; /* vertical spacing only */
+  padding: var(--spacing-2xl) 0;
+  /* vertical spacing only */
   text-align: center;
   position: relative;
   z-index: 2;
@@ -27,6 +30,8 @@
   color: var(--color-text-primary);
   line-height: 1.15;
   margin-bottom: 0.5rem;
+  padding: 0 var(--spacing-md);
+  word-wrap: break-word;
 }
 
 .heroSubtitle {
@@ -35,10 +40,22 @@
   font-size: 1rem;
   max-width: 720px;
   margin: 0.5rem auto 1rem;
+  padding: 0 var(--spacing-md);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .heroCta {
   margin-top: 1rem;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
 }
 
 .heroDecoration {
@@ -70,10 +87,11 @@
   opacity: 0.07;
 }
 
-  /* Main content wrapper below hero */
+/* Main content wrapper below hero */
 .main {
   background: var(--color-bg-cool);
-  padding: var(--spacing-2xl) var(--spacing-lg) 0; /* reduce bottom space before footer */
+  padding: var(--spacing-2xl) var(--spacing-lg) 0;
+  /* reduce bottom space before footer */
 }
 
 /* ============================= */
@@ -90,7 +108,8 @@
   cursor: pointer;
   box-shadow: var(--shadow-md);
   transition: background-color 0.2s ease, transform 0.15s ease;
-  margin: 1rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .addButton:hover {
@@ -160,10 +179,18 @@
     align-items: stretch;
   }
 
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .addButton {
     width: 100%;
   }
-  
+
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -174,5 +201,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-

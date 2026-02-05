@@ -71,3 +71,16 @@
     height: 32px;
   }
 }
+
+@media (max-width: 640px) {
+  .headerContent {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: center;
+  }
+}

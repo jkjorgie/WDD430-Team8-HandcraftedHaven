@@ -89,12 +89,10 @@
   display: block;
   width: 100px;
   height: 36px;
-  background: linear-gradient(
-    90deg,
-    var(--color-sage-light) 25%,
-    var(--color-cream) 50%,
-    var(--color-sage-light) 75%
-  );
+  background: linear-gradient(90deg,
+      var(--color-sage-light) 25%,
+      var(--color-cream) 50%,
+      var(--color-sage-light) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 0.5rem;
@@ -104,6 +102,7 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -112,19 +111,14 @@
 /* Responsive */
 @media (max-width: 640px) {
   .authContainer {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .loginBtn span,
-  .dashboardLink span,
-  .signOutBtn span {
-    display: none;
+    justify-content: center;
+    gap: 0.75rem;
   }
 
   .loginBtn,
   .dashboardLink,
   .signOutBtn {
-    padding: 0.625rem;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
   }
 }
