@@ -47,7 +47,9 @@ export async function createProduct(
     },
   });
 
+  // Revalidate both seller listings and home page
   revalidatePath("/seller/listings");
+  revalidatePath("/");
 
   return { success: true };
 }
