@@ -11,6 +11,24 @@ interface ProductBrowserProps {
 
 type PriceRange = "all" | "0-100" | "100-200" | "200-500" | "500+";
 
+// Convert category enum values to display names
+const getCategoryDisplayName = (category: string | undefined): string => {
+  if (!category) return "Other";
+
+  const categoryMap: Record<string, string> = {
+    TEXTILES_WEAVINGS: "Textiles & Weavings",
+    CERAMICS_POTTERY: "Ceramics & Pottery",
+    WOODCRAFT: "Woodcraft",
+    JEWELRY: "Jewelry",
+    ACCESSORIES: "Accessories",
+    PAINTINGS: "Paintings",
+    METALWORK: "Metalwork",
+    GLASSWORK: "Glasswork",
+    OTHER: "Other",
+  };
+  return categoryMap[category] || category;
+};
+
 export function ProductBrowser({ products }: ProductBrowserProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
@@ -208,7 +226,7 @@ export function ProductBrowser({ products }: ProductBrowserProps) {
             <option value="all">All Categories</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
-                {cat}
+                {getCategoryDisplayName(cat)}
               </option>
             ))}
           </select>
@@ -258,61 +276,61 @@ export function ProductBrowser({ products }: ProductBrowserProps) {
             />
           </svg>
         </div>
-      </form>
 
-      {/* Price Range Filters */}
-      <div className={styles.priceFilterSection}>
-        <fieldset className={styles.priceFilterFieldset}>
-          <legend className={styles.priceFilterLegend}>Price Range:</legend>
-          <div className={styles.priceFilterOptions}>
-            <label className={styles.priceFilterLabel}>
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.has("all")}
-                onChange={() => handlePriceRangeChange("all")}
-                className={styles.priceFilterCheckbox}
-              />
-              <span>All Prices</span>
-            </label>
-            <label className={styles.priceFilterLabel}>
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.has("0-100")}
-                onChange={() => handlePriceRangeChange("0-100")}
-                className={styles.priceFilterCheckbox}
-              />
-              <span>$0 - $100</span>
-            </label>
-            <label className={styles.priceFilterLabel}>
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.has("100-200")}
-                onChange={() => handlePriceRangeChange("100-200")}
-                className={styles.priceFilterCheckbox}
-              />
-              <span>$100 - $200</span>
-            </label>
-            <label className={styles.priceFilterLabel}>
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.has("200-500")}
-                onChange={() => handlePriceRangeChange("200-500")}
-                className={styles.priceFilterCheckbox}
-              />
-              <span>$200 - $500</span>
-            </label>
-            <label className={styles.priceFilterLabel}>
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.has("500+")}
-                onChange={() => handlePriceRangeChange("500+")}
-                className={styles.priceFilterCheckbox}
-              />
-              <span>Over $500</span>
-            </label>
-          </div>
-        </fieldset>
-      </div>
+        {/* Price Range Filters */}
+        <div className={styles.priceFilterSection}>
+          <fieldset className={styles.priceFilterFieldset}>
+            <legend className={styles.priceFilterLegend}>Price Range:</legend>
+            <div className={styles.priceFilterOptions}>
+              <label className={styles.priceFilterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedPriceRanges.has("all")}
+                  onChange={() => handlePriceRangeChange("all")}
+                  className={styles.priceFilterCheckbox}
+                />
+                <span>All Prices</span>
+              </label>
+              <label className={styles.priceFilterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedPriceRanges.has("0-100")}
+                  onChange={() => handlePriceRangeChange("0-100")}
+                  className={styles.priceFilterCheckbox}
+                />
+                <span>$0 - $100</span>
+              </label>
+              <label className={styles.priceFilterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedPriceRanges.has("100-200")}
+                  onChange={() => handlePriceRangeChange("100-200")}
+                  className={styles.priceFilterCheckbox}
+                />
+                <span>$100 - $200</span>
+              </label>
+              <label className={styles.priceFilterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedPriceRanges.has("200-500")}
+                  onChange={() => handlePriceRangeChange("200-500")}
+                  className={styles.priceFilterCheckbox}
+                />
+                <span>$200 - $500</span>
+              </label>
+              <label className={styles.priceFilterLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedPriceRanges.has("500+")}
+                  onChange={() => handlePriceRangeChange("500+")}
+                  className={styles.priceFilterCheckbox}
+                />
+                <span>Over $500</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </form>
 
       {/* Results Count - Live region for screen readers */}
       <div className={styles.resultsInfo}>
