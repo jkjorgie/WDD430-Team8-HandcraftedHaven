@@ -1,27 +1,36 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import styles from "../seller.module.css";
-import { SellerProfileForm, SellerProfileData } from "@/components";
+import { SellerProfileForm } from "@/components";
+import { auth } from "@/lib/auth";
+import { getSellerById } from "@/lib/sellers";
+import { updateSellerProfile } from "./actions";
 
-export default function EditSeller() {
-  const router = useRouter();
+export default async function EditSeller() {
+  const session = await auth();
 
-  // Temporary mock data (until DB/API is connected)
-  const initialData: SellerProfileData = {
-    name: "Sample Seller",
-    bio: "This is a sample biography.",
-    location: "Sample City",
-  };
-
-  // Simulated WRITE logic
-  function handleEdit(data: SellerProfileData) {
-    console.log("Updated seller profile:", data);
-
-    // Later this will call API / Prisma
-    router.push("/seller/listings");
+  if (!session?.user?.sellerId) {
+    redirect("/login");
   }
+
+  const seller = await getSellerById(session.user.sellerId);
+
+  if (!seller) {
+    return (
+      <div className={styles.sellerLayout}>
+        <div className={styles.card}>
+          <h1 className={styles.title}>Seller Profile Not Found</h1>
+          <p>Unable to load your seller profile.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const initialData = {
+    name: seller.name,
+    bio: seller.bio ?? "",
+    location: seller.location ?? "",
+  };
 
   return (
     <div className={styles.sellerLayout}>
@@ -31,7 +40,7 @@ export default function EditSeller() {
         <SellerProfileForm
           initialData={initialData}
           submitLabel="Save Changes"
-          onSubmit={handleEdit}
+          action={updateSellerProfile}
         />
 
         {/* Back link */}

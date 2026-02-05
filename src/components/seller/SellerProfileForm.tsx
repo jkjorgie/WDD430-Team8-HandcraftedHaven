@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useFormState } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import styles from "./SellerProfileForm.module.css";
 
 export type SellerProfileData = {
@@ -11,31 +13,27 @@ export type SellerProfileData = {
 
 type SellerProfileFormProps = {
   initialData?: SellerProfileData;
-  onSubmit: (data: SellerProfileData) => void;
+  action: (prevState: any, formData: FormData) => Promise<any>;
   submitLabel?: string;
 };
 
 export function SellerProfileForm({
   initialData = { name: "", bio: "", location: "" },
-  onSubmit,
+  action,
   submitLabel,
 }: SellerProfileFormProps) {
-  const [formData, setFormData] = useState<SellerProfileData>(initialData);
+  const router = useRouter();
+  const [state, formAction] = useFormState(action, {});
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    onSubmit(formData);
-  }
+  // Redirect on success
+  useEffect(() => {
+    if (state.success) {
+      router.push("/seller/listings");
+    }
+  }, [state.success, router]);
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} action={formAction}>
       <div className={styles.formGroup}>
         <label className={styles.label} htmlFor="name">
           Name
@@ -44,10 +42,12 @@ export function SellerProfileForm({
           className={styles.input}
           id="name"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          defaultValue={initialData.name}
           required
         />
+        {state.errors?.name && (
+          <p className={styles.error}>{state.errors.name[0]}</p>
+        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -58,10 +58,12 @@ export function SellerProfileForm({
           className={styles.textarea}
           id="bio"
           name="bio"
-          value={formData.bio}
-          onChange={handleChange}
+          defaultValue={initialData.bio}
           required
         />
+        {state.errors?.bio && (
+          <p className={styles.error}>{state.errors.bio[0]}</p>
+        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -72,11 +74,17 @@ export function SellerProfileForm({
           className={styles.input}
           id="location"
           name="location"
-          value={formData.location}
-          onChange={handleChange}
+          defaultValue={initialData.location}
           required
         />
+        {state.errors?.location && (
+          <p className={styles.error}>{state.errors.location[0]}</p>
+        )}
       </div>
+
+      {state.errors?._form && (
+        <p className={styles.error}>{state.errors._form[0]}</p>
+      )}
 
       <div className={styles.actions}>
         <button className="btn btn-primary" type="submit">
