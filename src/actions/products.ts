@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import { db } from '@/lib/db';
-import { ProductStatus } from '@/generated/prisma/client';
+import { db } from "@/lib/db";
+import { ProductStatus } from "@/generated/prisma/client";
 
 export interface ProductWithDetails {
   id: string;
@@ -13,6 +13,7 @@ export interface ProductWithDetails {
   rating: number;
   reviewCount: number;
   createdAt: Date;
+  category?: string;
 }
 
 export interface ReviewData {
@@ -44,27 +45,29 @@ export async function getPublishedProducts(): Promise<ProductWithDetails[]> {
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
   });
 
   return products.map((product) => {
     // Calculate average rating from reviews
     const reviewCount = product.reviews.length;
-    const rating = reviewCount > 0
-      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
-      : 0;
+    const rating =
+      reviewCount > 0
+        ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
+        : 0;
 
     return {
       id: product.id,
       title: product.title,
       description: product.description,
       price: Number(product.price),
-      image: product.imageUrl || 'https://picsum.photos/seed/default/400/400',
+      image: product.imageUrl || "https://picsum.photos/seed/default/400/400",
       seller: product.seller.name,
       rating: Math.round(rating * 10) / 10, // Round to 1 decimal
       reviewCount,
       createdAt: product.createdAt,
+      category: product.category,
     };
   });
 }
@@ -72,7 +75,9 @@ export async function getPublishedProducts(): Promise<ProductWithDetails[]> {
 /**
  * Fetch a single product by ID with full details
  */
-export async function getProductById(id: string): Promise<ProductDetailData | null> {
+export async function getProductById(
+  id: string
+): Promise<ProductDetailData | null> {
   const product = await db.product.findUnique({
     where: { id },
     include: {
@@ -86,7 +91,7 @@ export async function getProductById(id: string): Promise<ProductDetailData | nu
           },
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       },
     },
@@ -98,16 +103,17 @@ export async function getProductById(id: string): Promise<ProductDetailData | nu
 
   // Calculate average rating from reviews
   const reviewCount = product.reviews.length;
-  const rating = reviewCount > 0
-    ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
-    : 0;
+  const rating =
+    reviewCount > 0
+      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
+      : 0;
 
   return {
     id: product.id,
     title: product.title,
     description: product.description,
     price: Number(product.price),
-    image: product.imageUrl || 'https://picsum.photos/seed/default/400/400',
+    image: product.imageUrl || "https://picsum.photos/seed/default/400/400",
     seller: product.seller.name,
     rating: Math.round(rating * 10) / 10,
     reviewCount,
@@ -117,7 +123,7 @@ export async function getProductById(id: string): Promise<ProductDetailData | nu
       rating: review.rating,
       content: review.content,
       createdAt: review.createdAt,
-      userName: review.user?.name || 'Anonymous',
+      userName: review.user?.name || "Anonymous",
     })),
   };
 }

@@ -11,6 +11,7 @@ export interface Product {
   rating: number;
   reviewCount: number;
   createdAt: Date;
+  category?: string;
 }
 
 /**
