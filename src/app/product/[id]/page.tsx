@@ -1,56 +1,76 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { Header } from "@/components";
-import styles from "@/app/page.module.css";
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Header } from '@/components';
+import styles from '@/app/page.module.css';
+import {
+  getProductById,
+  ProductDetailData,
+  addRatingToProduct,
+  addReviewToProduct
+} from '@/actions';
 
-// TODO: Replace this mock data with database fetch using getProductById from @/actions/products
-// Example: const product = await getProductById(id);
-const mockProducts = [
-  {
-    id: "1",
-    title: "Hand-Thrown Ceramic Vase",
-    price: 89.0,
-    image: "https://picsum.photos/seed/vase/400/400",
-    seller: "Emma Pottery",
-    rating: 4.8,
-    reviewCount: 124,
-    description:
-      "A beautiful hand-thrown ceramic vase, perfect for displaying fresh or dried flowers.",
-  },
-  {
-    id: "2",
-    title: "Woven Macramé Wall Hanging",
-    price: 65.0,
-    image: "https://picsum.photos/seed/macrame/400/400",
-    seller: "Fiber Arts Co",
-    rating: 4.9,
-    reviewCount: 89,
-    description:
-      "Handcrafted macramé wall hanging made with natural cotton rope.",
-  },
-];
+// Genera o recupera un sessionId único para la sesión
+function getSessionId() {
+  let sessionId = sessionStorage.getItem('sessionId');
+  if (!sessionId) {
+    sessionId =
+      Math.random().toString(36).substring(2) + Date.now().toString(36);
+    sessionStorage.setItem('sessionId', sessionId);
+  }
+  return sessionId;
+}
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const id = String(params?.id ?? "");
+  const id = String(params?.id ?? '');
 
-  // TODO: Replace with database fetch - use getProductById(id) from @/actions/products
-  const product = mockProducts.find((p) => p.id === id) || mockProducts[0];
-
+  const [product, setProduct] = useState<ProductDetailData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   // Star rating state for interactive rating
-  const [hovered, setHovered] = useState(0);
-  const [selected, setSelected] = useState(0);
+  const [hovered, setHovered] = useState(product?.rating ?? 0);
+  const [selected, setSelected] = useState(product?.rating ?? 0);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleStarClick = (star: number) => {
+  useEffect(() => {
+    setLoading(true);
+    getProductById(id)
+      .then((prod) => {
+        setProduct(prod);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError('Failed to load product.');
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <div className={styles.page}>Loading...</div>;
+  if (error) return <div className={styles.page}>{error}</div>;
+  if (!product) return <div className={styles.page}>Product not found.</div>;
+
+  const handleStarClick = async (star: number) => {
+    // Let user rate only once per session for this product
+    const ratedProducts = JSON.parse(
+      sessionStorage.getItem('ratedProducts') || '{}'
+    );
+
     setSelected(star);
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 1200);
-    // TODO: Submit rating to database
+
+    await addRatingToProduct(id, star);
+    // Save the new rating for this product
+    ratedProducts[id] = star;
+    sessionStorage.setItem('ratedProducts', JSON.stringify(ratedProducts));
+
+    // Refresh the product to show the new rating
+    const updatedProduct = await getProductById(id);
+    if (updatedProduct) setProduct(updatedProduct);
   };
 
   const renderStars = () => {
@@ -60,21 +80,21 @@ export default function ProductDetailPage() {
         <span
           key={starValue}
           style={{
-            cursor: "pointer",
-            color: (hovered || selected) >= starValue ? "#FFD700" : "#ccc",
-            fontSize: "2rem",
-            transition: "color 0.2s",
+            cursor: 'pointer',
+            color: (hovered || selected) >= starValue ? '#FFD700' : '#ccc',
+            fontSize: '2rem',
+            transition: 'color 0.2s',
             filter:
-              hovered === starValue ? "drop-shadow(0 0 6px #FFD700)" : "none",
+              hovered === starValue ? 'drop-shadow(0 0 6px #FFD700)' : 'none'
           }}
           onMouseEnter={() => setHovered(starValue)}
           onMouseLeave={() => setHovered(0)}
           onClick={() => handleStarClick(starValue)}
-          aria-label={`Rate ${starValue} star${starValue > 1 ? "s" : ""}`}
-          role="button"
+          aria-label={`Rate ${starValue} star${starValue > 1 ? 's' : ''}`}
+          role='button'
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") handleStarClick(starValue);
+            if (e.key === 'Enter' || e.key === ' ') handleStarClick(starValue);
           }}
         >
           ★
@@ -83,10 +103,10 @@ export default function ProductDetailPage() {
     });
   };
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(product.price);
+  const formattedPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(product?.price ?? 0);
 
   return (
     <div className={styles.page}>
@@ -108,29 +128,29 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Interactive Star Rating */}
-          <div className={styles.starRating} style={{ position: "relative" }}>
-            <p style={{ marginBottom: "0.5rem", fontWeight: 500 }}>
+          <div className={styles.starRating} style={{ position: 'relative' }}>
+            <p style={{ marginBottom: '0.5rem', fontWeight: 500 }}>
               Rate this product!
             </p>
             <div
-              style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
             >
               {renderStars()}
               {showPopup && (
                 <span
                   style={{
-                    marginLeft: "1rem",
-                    color: "#388e3c",
-                    fontWeight: "bold",
-                    background: "#e8f5e9",
-                    borderRadius: "6px",
-                    padding: "0.2rem 0.7rem",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    fontSize: "1rem",
+                    marginLeft: '1rem',
+                    color: '#388e3c',
+                    fontWeight: 'bold',
+                    background: '#e8f5e9',
+                    borderRadius: '6px',
+                    padding: '0.2rem 0.7rem',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    fontSize: '1rem'
                   }}
-                  role="status"
+                  role='status'
                 >
-                  Rated {selected} {selected === 1 ? "star" : "stars"}!
+                  Rated {selected} {selected === 1 ? 'star' : 'stars'}!
                 </span>
               )}
             </div>
@@ -145,7 +165,7 @@ export default function ProductDetailPage() {
               <strong>Price:</strong> {formattedPrice}
             </p>
             <p>
-              <strong>Rating:</strong> {product.rating} ({product.reviewCount}{" "}
+              <strong>Rating:</strong> {product.rating} ({product.reviewCount}{' '}
               reviews)
             </p>
           </div>
@@ -161,29 +181,50 @@ export default function ProductDetailPage() {
           {/* Comments Section */}
           <div className={styles.commentSection}>
             <h3>Leave a Comment!</h3>
-            <form className={styles.commentForm}>
+            <form
+              className={styles.commentForm}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const formData = new FormData(form);
+                const userId = formData.get('userId')?.toString().trim();
+                const content = formData.get('content')?.toString().trim();
+                if (!userId || !content) return;
+                await addReviewToProduct(id, content, userId);
+                const updatedProduct = await getProductById(id);
+                if (updatedProduct) setProduct(updatedProduct);
+                form.reset();
+              }}
+            >
+              <input
+                name='userId'
+                type='text'
+                placeholder='Your name'
+                className={styles.usernameCommentInput}
+              />
               <textarea
-                placeholder="Add a comment"
+                name='content'
+                placeholder='Add a comment'
                 className={styles.commentInput}
                 rows={2}
               />
               <button
-                type="submit"
+                type='submit'
                 className={styles.commentSubmitBtn}
-                aria-label="Submit comment"
+                aria-label='Submit comment'
               >
                 <svg
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
+                  width='20'
+                  height='20'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  aria-hidden='true'
                 >
                   <path
-                    d="M5 10h10M13 6l4 4-4 4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    d='M5 10h10M13 6l4 4-4 4'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
               </button>
@@ -193,22 +234,35 @@ export default function ProductDetailPage() {
           {/* Recent Reviews - TODO: Fetch from database */}
           <div className={styles.lastCommentSection}>
             <h3>Recent Reviews</h3>
-            <div className={styles.comment}>
-              <p>
-                <strong>Alice:</strong> Absolutely love this piece! The
-                craftsmanship is top-notch.
-              </p>
-            </div>
+            {(() => {
+              const comments = product.reviews
+                ? product.reviews.filter((review) => !!review.content)
+                : [];
+              return comments.length > 0 ? (
+                comments.map((review) => (
+                  <div className={styles.comment} key={review.id}>
+                    <p>
+                      <strong>{review.userName}:</strong> {review.content}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.comment}>
+                  <p>No comments yet.</p>
+                </div>
+              );
+            })()}
             <button
               style={{
-                textAlign: "center",
-                display: "block",
-                cursor: "pointer",
-                marginTop: "1.5rem",
-                background: "none",
-                border: "none",
-                color: "var(--color-terracotta)",
-                fontWeight: 500,
+                textAlign: 'center',
+                display: 'block',
+                cursor: 'pointer',
+                margin: 'auto',
+                marginTop: '1.5rem',
+                background: 'none',
+                border: 'none',
+                color: 'var(--color-terracotta)',
+                fontWeight: 500
               }}
             >
               Show More
@@ -216,7 +270,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        <Link className={styles.backLink} href="/">
+        <Link className={styles.backLink} href='/'>
           ← Back to Home
         </Link>
       </main>

@@ -285,7 +285,21 @@
   min-height: 100px;
   padding: var(--spacing-md);
   padding-right: 44px;
-  /* espacio para el botón */
+  /* Button space */
+  font-size: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-cool);
+  color: var(--color-text-primary);
+  transition: all var(--transition-base);
+  font-family: var(--font-lora), Georgia, serif;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.usernameCommentInput {
+  width: 100%;
+  padding: var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -417,7 +431,8 @@
 
 .searchInput {
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) * 3);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md)
+    calc(var(--spacing-md) * 3);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -488,7 +503,8 @@
 
 .sortSelect {
   appearance: none;
-  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md)
+    var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -534,7 +550,8 @@
 
 .selectInput {
   appearance: none;
-  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md)
+    var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -745,7 +762,6 @@
 
 /* Mobile */
 @media (max-width: 480px) {
-
   /* Hide text on seller button, show only icon */
   .sellerBtn span {
     position: absolute;
@@ -843,7 +859,6 @@
 
 /* Print styles */
 @media print {
-
   .header,
   .searchControls,
   .footer {
