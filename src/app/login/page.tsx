@@ -62,7 +62,7 @@ function LoginForm() {
       <Header />
 
       {/* Main Content */}
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         <div className={styles.loginCard}>
           <div className={styles.cardHeader}>
             <h1 className={styles.title}>Seller Login</h1>
@@ -189,7 +189,7 @@ function LoginLoading() {
   return (
     <div className={styles.page}>
       <Header />
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         <div className={styles.loginCard}>
           <div className={styles.cardHeader}>
             <h1 className={styles.title}>Seller Login</h1>

@@ -15,7 +15,6 @@ import {
   PRODUCT_STATUSES,
 } from "@/lib/constants/productEnums";
 
-
 const initialState: CreateProductState = {};
 
 function SubmitButton() {
@@ -33,7 +32,6 @@ function formatCategory(cat: string) {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
-
 
 export default function AddListingPage() {
   const router = useRouter();
@@ -72,8 +70,10 @@ export default function AddListingPage() {
             <div className={styles.formGrid}>
               {/* Title */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Product Title *</label>
-                <input name="title" className={styles.input} />
+                <label htmlFor="add-title" className={styles.label}>
+                  Product Title *
+                </label>
+                <input id="add-title" name="title" className={styles.input} />
                 {state.errors?.title && (
                   <p className={styles.errorText}>{state.errors.title[0]}</p>
                 )}
@@ -81,8 +81,14 @@ export default function AddListingPage() {
 
               {/* Category */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Category *</label>
-                <select name="category" className={styles.input}>
+                <label htmlFor="add-category" className={styles.label}>
+                  Category *
+                </label>
+                <select
+                  id="add-category"
+                  name="category"
+                  className={styles.input}
+                >
                   <option value="">Select a category</option>
                   {PRODUCT_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -92,16 +98,17 @@ export default function AddListingPage() {
                 </select>
 
                 {state.errors?.category && (
-                  <p className={styles.errorText}>
-                    {state.errors.category[0]}
-                  </p>
+                  <p className={styles.errorText}>{state.errors.category[0]}</p>
                 )}
               </div>
 
               {/* Price */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Price *</label>
+                <label htmlFor="add-price" className={styles.label}>
+                  Price *
+                </label>
                 <input
+                  id="add-price"
                   name="price"
                   type="number"
                   step="0.01"
@@ -114,8 +121,11 @@ export default function AddListingPage() {
 
               {/* Stock */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Stock *</label>
+                <label htmlFor="add-stock" className={styles.label}>
+                  Stock *
+                </label>
                 <input
+                  id="add-stock"
                   name="stock"
                   type="number"
                   min="0"
@@ -128,21 +138,25 @@ export default function AddListingPage() {
 
               {/* Status */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Status *</label>
-                <select name="status" className={styles.input}>
+                <label htmlFor="add-status" className={styles.label}>
+                  Status *
+                </label>
+                <select id="add-status" name="status" className={styles.input}>
                   {PRODUCT_STATUSES.map((status) => (
                     <option key={status} value={status}>
                       {status}
                     </option>
                   ))}
                 </select>
-
               </div>
 
               {/* Image */}
               <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                <label className={styles.label}>Image URL</label>
+                <label htmlFor="add-imageUrl" className={styles.label}>
+                  Image URL
+                </label>
                 <input
+                  id="add-imageUrl"
                   name="imageUrl"
                   type="url"
                   className={styles.input}
@@ -172,8 +186,11 @@ export default function AddListingPage() {
 
               {/* Description */}
               <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                <label className={styles.label}>Description *</label>
+                <label htmlFor="add-description" className={styles.label}>
+                  Description *
+                </label>
                 <textarea
+                  id="add-description"
                   name="description"
                   rows={5}
                   className={`${styles.input} ${styles.textarea}`}

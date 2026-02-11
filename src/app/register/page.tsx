@@ -99,7 +99,7 @@ export default function RegisterPage() {
       <Header />
 
       {/* Main Content */}
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         <div className={styles.registerCard}>
           <div className={styles.cardHeader}>
             <h1 className={styles.title}>Create Seller Account</h1>

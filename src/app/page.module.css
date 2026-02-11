@@ -193,7 +193,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  padding-left: calc(100vw - 90%);
+  padding-left: var(--spacing-md);
 }
 
 .detailSubtitle {
@@ -236,26 +236,41 @@
   line-height: 1.6;
   text-align: center;
   margin: auto;
-  width: 70%;
+  width: 100%;
+  max-width: 70%;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
 }
 
 .backLink {
   display: inline-block;
-  position: fixed;
-  bottom: var(--spacing-lg);
-  right: var(--spacing-lg);
   text-decoration: none;
   color: var(--color-primary);
   font-family: var(--font-lora), Georgia, serif;
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.backLink:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .commentSection {
   margin-top: var(--spacing-xl);
   width: 100%;
   margin: auto;
-  max-width: 70vw;
+  max-width: 800px;
   margin-bottom: var(--spacing-xl);
   text-align: center;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
 }
 
 .commentInput {
@@ -278,6 +293,21 @@
 .commentForm {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.commentFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.commentLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
 }
 
 .commentInput {
@@ -334,21 +364,64 @@
   background: var(--color-primary-dark, #b86b2b);
 }
 
+.commentSubmitBtn:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
+}
+
 .starRating {
   margin-bottom: 1rem;
   display: block;
   text-align: center;
   align-self: center;
   user-select: none;
+  position: relative;
+}
+
+.ratingPrompt {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.starRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.interactiveStar {
+  cursor: pointer;
+  font-size: 2rem;
+  transition: color 0.2s;
+}
+
+.interactiveStar:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.ratingPopup {
+  margin-left: 1rem;
+  color: var(--color-success);
+  font-weight: bold;
+  background: #ecfdf5;
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-size: 1rem;
 }
 
 .lastCommentSection {
   margin-top: var(--spacing-xl);
   width: 100%;
   margin: auto;
-  max-width: 70vw;
+  max-width: 800px;
   margin-bottom: var(--spacing-xs);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
+  box-sizing: border-box;
 }
 
 .comment {
@@ -431,8 +504,7 @@
 
 .searchInput {
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md)
-    calc(var(--spacing-md) * 3);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) * 3);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -503,8 +575,7 @@
 
 .sortSelect {
   appearance: none;
-  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md)
-    var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md) var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -550,8 +621,7 @@
 
 .selectInput {
   appearance: none;
-  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md)
-    var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) * 2.5) var(--spacing-md) var(--spacing-md);
   font-size: 1rem;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -641,7 +711,7 @@
 
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--spacing-xl);
 }
 
@@ -758,10 +828,23 @@
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: var(--spacing-md);
   }
+
+  /* Product detail page responsive */
+  .detailDescription {
+    max-width: 100%;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .commentSection,
+  .lastCommentSection {
+    max-width: 100%;
+    padding: 0 var(--spacing-sm);
+  }
 }
 
 /* Mobile */
 @media (max-width: 480px) {
+
   /* Hide text on seller button, show only icon */
   .sellerBtn span {
     position: absolute;
@@ -859,6 +942,7 @@
 
 /* Print styles */
 @media print {
+
   .header,
   .searchControls,
   .footer {

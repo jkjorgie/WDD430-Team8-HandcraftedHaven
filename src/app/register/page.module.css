@@ -163,8 +163,8 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--color-charcoal-light);
-  opacity: 0.6;
+  color: #6b7280;
+  opacity: 1;
 }
 
 .textarea {
@@ -224,6 +224,11 @@
 .submitBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.submitBtn:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
 }
 
 .spinner {
@@ -297,6 +302,11 @@
   transform: translateY(0);
   box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   background: #f3f4f6;
+}
+
+.loginBtn:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
 }
 
 /* Footer */

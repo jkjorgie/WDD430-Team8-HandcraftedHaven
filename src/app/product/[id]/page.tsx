@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components";
@@ -27,6 +28,10 @@ function getSessionId() {
 export default function ProductDetailPage() {
   const params = useParams();
   const id = String(params?.id ?? "");
+  const { data: session } = useSession();
+
+  // Check if user is a signed-in seller
+  const isSeller = !!session?.user?.sellerId;
 
   const [product, setProduct] = useState<ProductDetailData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,6 +40,10 @@ export default function ProductDetailPage() {
   const [hovered, setHovered] = useState(product?.rating ?? 0);
   const [selected, setSelected] = useState(product?.rating ?? 0);
   const [showPopup, setShowPopup] = useState(false);
+
+  // Generate unique IDs for form labels (WCAG accessibility)
+  const nameInputId = useId();
+  const commentInputId = useId();
 
   useEffect(() => {
     setLoading(true);
@@ -76,16 +85,17 @@ export default function ProductDetailPage() {
   const renderStars = () => {
     return Array.from({ length: 5 }, (_, i) => {
       const starValue = i + 1;
+      const isActive = (hovered || selected) >= starValue;
       return (
         <span
           key={starValue}
+          className={styles.interactiveStar}
           style={{
-            cursor: "pointer",
-            color: (hovered || selected) >= starValue ? "#FFD700" : "#ccc",
-            fontSize: "2rem",
-            transition: "color 0.2s",
+            color: isActive ? "var(--color-star)" : "var(--color-star-empty)",
             filter:
-              hovered === starValue ? "drop-shadow(0 0 6px #FFD700)" : "none",
+              hovered === starValue
+                ? "drop-shadow(0 0 6px var(--color-star))"
+                : "none",
           }}
           onMouseEnter={() => setHovered(starValue)}
           onMouseLeave={() => setHovered(0)}
@@ -112,7 +122,7 @@ export default function ProductDetailPage() {
     <div className={styles.page}>
       <Header />
 
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         <h1 className={styles.detailTitle}>Product Details</h1>
         <div className={styles.detailCard}>
           <h2 className={styles.detailSubtitle}>{product.title}</h2>
@@ -127,34 +137,20 @@ export default function ProductDetailPage() {
             />
           </div>
 
-          {/* Interactive Star Rating */}
-          <div className={styles.starRating} style={{ position: "relative" }}>
-            <p style={{ marginBottom: "0.5rem", fontWeight: 500 }}>
-              Rate this product!
-            </p>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
-            >
-              {renderStars()}
-              {showPopup && (
-                <span
-                  style={{
-                    marginLeft: "1rem",
-                    color: "#388e3c",
-                    fontWeight: "bold",
-                    background: "#e8f5e9",
-                    borderRadius: "6px",
-                    padding: "0.2rem 0.7rem",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    fontSize: "1rem",
-                  }}
-                  role="status"
-                >
-                  Rated {selected} {selected === 1 ? "star" : "stars"}!
-                </span>
-              )}
+          {/* Interactive Star Rating - only shown to non-sellers */}
+          {!isSeller && (
+            <div className={styles.starRating}>
+              <p className={styles.ratingPrompt}>Rate this product!</p>
+              <div className={styles.starRow}>
+                {renderStars()}
+                {showPopup && (
+                  <span className={styles.ratingPopup} role="status">
+                    Rated {selected} {selected === 1 ? "star" : "stars"}!
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className={styles.detailInfo}>
             <h3>Details</h3>
@@ -178,58 +174,77 @@ export default function ProductDetailPage() {
             </p>
           </div>
 
-          {/* Comments Section */}
-          <div className={styles.commentSection}>
-            <h3>Leave a Comment!</h3>
-            <form
-              className={styles.commentForm}
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const form = e.target as HTMLFormElement;
-                const formData = new FormData(form);
-                const userId = formData.get("userId")?.toString().trim();
-                const content = formData.get("content")?.toString().trim();
-                if (!userId || !content) return;
-                await addReviewToProduct(id, content, userId);
-                const updatedProduct = await getProductById(id);
-                if (updatedProduct) setProduct(updatedProduct);
-                form.reset();
-              }}
-            >
-              <input
-                name="userId"
-                type="text"
-                placeholder="Your name"
-                className={styles.usernameCommentInput}
-              />
-              <textarea
-                name="content"
-                placeholder="Add a comment"
-                className={styles.commentInput}
-                rows={2}
-              />
-              <button
-                type="submit"
-                className={styles.commentSubmitBtn}
-                aria-label="Submit comment"
+          {/* Comments Section - only shown to non-sellers */}
+          {!isSeller && (
+            <div className={styles.commentSection}>
+              <h3>Leave a Comment!</h3>
+              <form
+                className={styles.commentForm}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const form = e.target as HTMLFormElement;
+                  const formData = new FormData(form);
+                  const userId = formData.get("userId")?.toString().trim();
+                  const content = formData.get("content")?.toString().trim();
+                  if (!userId || !content) return;
+                  await addReviewToProduct(id, content, userId);
+                  const updatedProduct = await getProductById(id);
+                  if (updatedProduct) setProduct(updatedProduct);
+                  form.reset();
+                }}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M5 10h10M13 6l4 4-4 4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <div className={styles.commentFormGroup}>
+                  <label htmlFor={nameInputId} className={styles.commentLabel}>
+                    Your Name
+                  </label>
+                  <input
+                    id={nameInputId}
+                    name="userId"
+                    type="text"
+                    placeholder="Enter your name"
+                    className={styles.usernameCommentInput}
+                    required
                   />
-                </svg>
-              </button>
-            </form>
-          </div>
+                </div>
+                <div className={styles.commentFormGroup}>
+                  <label
+                    htmlFor={commentInputId}
+                    className={styles.commentLabel}
+                  >
+                    Comment
+                  </label>
+                  <textarea
+                    id={commentInputId}
+                    name="content"
+                    placeholder="Add a comment"
+                    className={styles.commentInput}
+                    rows={2}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className={styles.commentSubmitBtn}
+                  aria-label="Submit comment"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M5 10h10M13 6l4 4-4 4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          )}
 
           {/* Recent Reviews - TODO: Fetch from database */}
           <div className={styles.lastCommentSection}>

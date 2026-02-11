@@ -8,7 +8,9 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
       <Header />
 
       {/* Page content */}
-      <main className={styles.main}>{children}</main>
+      <main id="main-content" className={styles.main}>
+        {children}
+      </main>
 
       {/* Footer */}
       <footer className={styles.footer} role="contentinfo">

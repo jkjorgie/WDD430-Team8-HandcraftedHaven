@@ -117,6 +117,11 @@
   transform: translateY(-2px);
 }
 
+.addButton:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
+}
+
 /* ============================= */
 /* Listings Section */
 /* ============================= */
@@ -135,7 +140,7 @@
 /* Grid placeholder (cards come later) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--spacing-xl);
   align-items: start;
 }
@@ -174,6 +179,11 @@
 /* ============================= */
 
 @media (max-width: 768px) {
+  .hero {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+
   .header {
     flex-direction: column;
     align-items: stretch;
@@ -193,6 +203,14 @@
 
   .grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: -20px;
   }
 }
 

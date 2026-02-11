@@ -37,6 +37,11 @@
   transform: scale(0.98);
 }
 
+.loginBtn:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
+}
+
 /* Dashboard Link */
 .dashboardLink {
   display: inline-flex;
@@ -54,6 +59,11 @@
 
 .dashboardLink:hover {
   background: var(--color-sage);
+}
+
+.dashboardLink:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
 }
 
 /* Sign Out Button */
@@ -76,6 +86,11 @@
   background: var(--color-cream);
   border-color: var(--color-charcoal-light);
   color: var(--color-charcoal);
+}
+
+.signOutBtn:focus-visible {
+  outline: 2px solid var(--color-focus, #C26A1F);
+  outline-offset: 2px;
 }
 
 /* Loading Skeleton */

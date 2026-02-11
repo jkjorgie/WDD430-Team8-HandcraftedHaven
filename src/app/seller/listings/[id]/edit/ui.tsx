@@ -45,9 +45,7 @@ export default function EditListingForm({ product }: { product: any }) {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Edit Product</h1>
-          <p className={styles.heroSubtitle}>
-            Update your listing details.
-          </p>
+          <p className={styles.heroSubtitle}>Update your listing details.</p>
         </div>
       </section>
 
@@ -61,77 +59,133 @@ export default function EditListingForm({ product }: { product: any }) {
             )}
 
             <div className={styles.formGrid}>
-              <input name="title" defaultValue={product.title} className={styles.input} />
+              {/* Title */}
+              <div className={styles.formGroup}>
+                <label htmlFor="edit-title" className={styles.label}>
+                  Product Title *
+                </label>
+                <input
+                  id="edit-title"
+                  name="title"
+                  defaultValue={product.title}
+                  className={styles.input}
+                />
+              </div>
 
-              <select name="category" defaultValue={product.category} className={styles.input}>
-                {PRODUCT_CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat.replace(/_/g, " ")}
-                  </option>
-                ))}
-              </select>
+              {/* Category */}
+              <div className={styles.formGroup}>
+                <label htmlFor="edit-category" className={styles.label}>
+                  Category *
+                </label>
+                <select
+                  id="edit-category"
+                  name="category"
+                  defaultValue={product.category}
+                  className={styles.input}
+                >
+                  {PRODUCT_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat.replace(/_/g, " ")}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <input
-                name="price"
-                type="number"
-                step="0.01"
-                defaultValue={product.price}
-                className={styles.input}
-              />
+              {/* Price */}
+              <div className={styles.formGroup}>
+                <label htmlFor="edit-price" className={styles.label}>
+                  Price *
+                </label>
+                <input
+                  id="edit-price"
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  defaultValue={product.price}
+                  className={styles.input}
+                />
+              </div>
 
-              <input
-                name="stock"
-                type="number"
-                defaultValue={product.stock}
-                className={styles.input}
-              />
+              {/* Stock */}
+              <div className={styles.formGroup}>
+                <label htmlFor="edit-stock" className={styles.label}>
+                  Stock *
+                </label>
+                <input
+                  id="edit-stock"
+                  name="stock"
+                  type="number"
+                  defaultValue={product.stock}
+                  className={styles.input}
+                />
+              </div>
 
-              <select
-                name="status"
-                defaultValue={product.status}
-                className={styles.input}
-              >
-                {PRODUCT_STATUSES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+              {/* Status */}
+              <div className={styles.formGroup}>
+                <label htmlFor="edit-status" className={styles.label}>
+                  Status *
+                </label>
+                <select
+                  id="edit-status"
+                  name="status"
+                  defaultValue={product.status}
+                  className={styles.input}
+                >
+                  {PRODUCT_STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-              <input
-                name="imageUrl"
-                defaultValue={product.imageUrl || ""}
-                className={styles.input}
-                onChange={(e) => {
-                  setImagePreview(e.target.value);
-                  setImageError(false);
-                }}
-              />
+              {/* Image URL */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label htmlFor="edit-imageUrl" className={styles.label}>
+                  Image URL
+                </label>
+                <input
+                  id="edit-imageUrl"
+                  name="imageUrl"
+                  defaultValue={product.imageUrl || ""}
+                  className={styles.input}
+                  onChange={(e) => {
+                    setImagePreview(e.target.value);
+                    setImageError(false);
+                  }}
+                />
+                {imagePreview && (
+                  <div className={styles.imagePreview}>
+                    {!imageError ? (
+                      <Image
+                        src={imagePreview}
+                        alt="Preview"
+                        fill
+                        unoptimized
+                        onError={() => setImageError(true)}
+                      />
+                    ) : (
+                      <div className={styles.previewFallback}>
+                        Image unavailable
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
-              {imagePreview && (
-                <div className={styles.imagePreview}>
-                  {!imageError ? (
-                    <Image
-                      src={imagePreview}
-                      alt="Preview"
-                      fill
-                      unoptimized
-                      onError={() => setImageError(true)}
-                    />
-                  ) : (
-                    <div className={styles.previewFallback}>
-                      Image unavailable
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <textarea
-                name="description"
-                defaultValue={product.description || ""}
-                rows={5}
-                className={`${styles.input} ${styles.textarea}`}
-              />
+              {/* Description */}
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label htmlFor="edit-description" className={styles.label}>
+                  Description *
+                </label>
+                <textarea
+                  id="edit-description"
+                  name="description"
+                  defaultValue={product.description || ""}
+                  rows={5}
+                  className={`${styles.input} ${styles.textarea}`}
+                />
+              </div>
             </div>
 
             <div className={styles.formActions}>
