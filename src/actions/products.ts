@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/db";
-import { ProductStatus } from "@/generated/prisma/client";
+import { db } from '@/lib/db';
+import { ProductStatus } from '@/generated/prisma/client';
 
 export interface ProductWithDetails {
   id: string;
@@ -34,19 +34,19 @@ export interface ProductDetailData extends ProductWithDetails {
 export async function getPublishedProducts(): Promise<ProductWithDetails[]> {
   const products = await db.product.findMany({
     where: {
-      status: ProductStatus.PUBLISHED,
+      status: ProductStatus.PUBLISHED
     },
     include: {
       seller: true,
       reviews: {
         select: {
-          rating: true,
-        },
-      },
+          rating: true
+        }
+      }
     },
     orderBy: {
-      createdAt: "desc",
-    },
+      createdAt: 'desc'
+    }
   });
 
   return products.map((product) => {
@@ -62,12 +62,12 @@ export async function getPublishedProducts(): Promise<ProductWithDetails[]> {
       title: product.title,
       description: product.description,
       price: Number(product.price),
-      image: product.imageUrl || "https://picsum.photos/seed/default/400/400",
+      image: product.imageUrl || 'https://picsum.photos/seed/default/400/400',
       seller: product.seller.name,
       rating: Math.round(rating * 10) / 10, // Round to 1 decimal
       reviewCount,
       createdAt: product.createdAt,
-      category: product.category,
+      category: product.category
     };
   });
 }
@@ -86,15 +86,15 @@ export async function getProductById(
         include: {
           user: {
             select: {
-              name: true,
-            },
-          },
+              name: true
+            }
+          }
         },
         orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
+          createdAt: 'desc'
+        }
+      }
+    }
   });
 
   if (!product) {
@@ -113,7 +113,7 @@ export async function getProductById(
     title: product.title,
     description: product.description,
     price: Number(product.price),
-    image: product.imageUrl || "https://picsum.photos/seed/default/400/400",
+    image: product.imageUrl || 'https://picsum.photos/seed/default/400/400',
     seller: product.seller.name,
     rating: Math.round(rating * 10) / 10,
     reviewCount,
@@ -123,7 +123,68 @@ export async function getProductById(
       rating: review.rating,
       content: review.content,
       createdAt: review.createdAt,
-      userName: review.user?.name || "Anonymous",
-    })),
+      userName: review.user?.name || 'Anonymous'
+    }))
   };
+}
+
+/**
+ * Add a new review to a product and return the created review with user info
+ */
+export async function addReviewToProduct(
+  productId: string,
+  content: string,
+  userId: string,
+  rating: number = 0
+): Promise<ReviewData | null> {
+  try {
+    const review = await db.review.create({
+      data: {
+        productId,
+        content,
+        userId,
+        rating
+      }
+    });
+    return {
+      id: review.id,
+      rating: review.rating,
+      content: review.content,
+      createdAt: review.createdAt,
+      userName: review.userId || 'Anonymous'
+    };
+  } catch (error) {
+    console.error('Error adding rating:', error);
+    return null;
+  }
+}
+
+/**
+ * Add a new rating to a product without content (for quick star ratings) and return the created review with user info
+ */
+
+export async function addRatingToProduct(
+  productId: string,
+  rating: number
+): Promise<ReviewData | null> {
+  try {
+    const review = await db.review.create({
+      data: {
+        productId,
+        rating,
+        content: null
+        // No userId
+      }
+    });
+    return {
+      id: review.id,
+      rating: review.rating,
+      content: review.content,
+      createdAt: review.createdAt,
+      userName: 'Anonymous'
+    };
+  } catch (error) {
+    console.error('Error adding rating:', error);
+    return null;
+  }
 }
